@@ -15,6 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tcgtracker.ui.ScreenLabel
 
+/**
+ * This screen allows a logged-in user to scan a physical card using the device camera.
+ *
+ * @param navController - The object responsible for navigation between composable screens.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanCardsScreen(navController: NavController) {
@@ -27,7 +32,7 @@ fun ScanCardsScreen(navController: NavController) {
             onClick = { navController.popBackStack() },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 90.dp)
+                .padding(end = 16.dp, bottom = 30.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,

@@ -23,6 +23,10 @@ import com.example.tcgtracker.screens.PokemonCardSetScreen
 import com.example.tcgtracker.screens.ScanCardsScreen
 import com.example.tcgtracker.ui.theme.TCGTrackerTheme
 
+/**
+ * Displays the bottom navbar on certain screens. The user currently begins on
+ * the All Pokemon Cards screen.
+ */
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

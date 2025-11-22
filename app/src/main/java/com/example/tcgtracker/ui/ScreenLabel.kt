@@ -10,6 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * Displays a label at the top of the screen describing what screen the user is viewing.
+ *
+ * @param text - A String that displays the name of the screen being viewed.
+ */
 @Composable
 fun ScreenLabel(text: String) {
     Box(

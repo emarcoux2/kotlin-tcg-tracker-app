@@ -27,6 +27,11 @@ import androidx.navigation.NavController
 import com.example.tcgtracker.R
 import com.example.tcgtracker.ui.ScreenLabel
 
+/**
+ * Displays the details of an individual Pokemon card.
+ *
+ * @param navController - The object responsible for navigation between composable screens.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonCardDetailsScreen(navController: NavController) {

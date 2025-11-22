@@ -20,6 +20,11 @@ import androidx.navigation.NavController
 import com.example.tcgtracker.R
 import com.example.tcgtracker.ui.ScreenLabel
 
+/**
+ * Displays all Pokemon card sets.
+ *
+ * @param navController - The object responsible for navigation between composable screens.
+ */
 @Composable
 fun PokemonCardSetScreen(navController: NavController) {
     val cardSets = listOf(

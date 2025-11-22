@@ -13,11 +13,22 @@ import androidx.wear.compose.navigation.currentBackStackEntryAsState
 import com.example.tcgtracker.R
 import com.example.tcgtracker.destinations.Destination
 
+/**
+ * Represents an item for a Bottom Nav Bar.
+ *
+ * @property destination - The destination to go to when navigating.
+ * @property icon - The Nav Bar icon.
+ */
 data class BottomNavItem(
     val destination: Destination,
     val icon: Painter
 )
 
+/**
+ * Displays the main bottom navigation bar on all screens.
+ *
+ * @param navController - The object responsible for navigation between composable screens.
+ */
 @Composable
 fun MainBottomNavBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
