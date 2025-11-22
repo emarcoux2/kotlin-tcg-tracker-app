@@ -15,8 +15,8 @@ fun ScreenLabel(text: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
-        contentAlignment = Alignment.Center
+            .padding(8.dp),
+        contentAlignment = Alignment.TopCenter
     ) {
         Text(
             text = text,
