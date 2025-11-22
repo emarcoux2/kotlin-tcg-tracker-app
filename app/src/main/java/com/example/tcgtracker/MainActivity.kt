@@ -15,18 +15,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
-//import com.example.tcgtracker.navigation.AccountBottomNavBar
-//import com.example.tcgtracker.navigation.AllPokemonCardsBottomNavBar
-//import com.example.tcgtracker.navigation.FavouritePokemonCardsBottomNavBar
 import com.example.tcgtracker.navigation.MainBottomNavBar
-//import com.example.tcgtracker.navigation.MyPokemonCardsBottomNavBar
-//import com.example.tcgtracker.navigation.PokemonCardDetailsBottomNavBar
-//import com.example.tcgtracker.navigation.PokemonCardSetBottomNavBar
-//import com.example.tcgtracker.navigation.PokemonCardSetDetailsBottomNavBar
-import com.example.tcgtracker.screens.AccountScreen
 import com.example.tcgtracker.screens.AllPokemonCardsScreen
-import com.example.tcgtracker.screens.FavouritePokemonCardsScreen
-import com.example.tcgtracker.screens.MyPokemonCardsScreen
 import com.example.tcgtracker.screens.PokemonCardDetailsScreen
 import com.example.tcgtracker.screens.PokemonCardSetDetailsScreen
 import com.example.tcgtracker.screens.PokemonCardSetScreen
@@ -47,7 +37,9 @@ class MainActivity : ComponentActivity() {
                 val showBottomBar = when (currentDestination) {
                     "allPokemonCardsScreen",
                     "scanCardsScreen",
-                    "pokemonCardSetScreen" -> true
+                    "pokemonCardSetScreen",
+                    "pokemonCardDetailsScreen",
+                    "pokemonCardSetDetailsScreen" -> true
 
                     else -> false
                 }
@@ -62,15 +54,6 @@ class MainActivity : ComponentActivity() {
                         if (showBottomBar) {
                             MainBottomNavBar(navController)
                         }
-//                        when (currentDestination) {
-//                            "accountScreen" -> AccountBottomNavBar(navController)
-//                            "allPokemonCardsScreen" -> AllPokemonCardsBottomNavBar(navController)
-//                            "favouritePokemonCardsScreen" -> FavouritePokemonCardsBottomNavBar(navController)
-//                            "myPokemonCardsScreen" -> MyPokemonCardsBottomNavBar(navController)
-//                            "pokemonCardDetailsScreen" -> PokemonCardDetailsBottomNavBar(navController)
-//                            "pokemonCardSetScreen" -> PokemonCardSetBottomNavBar(navController)
-//                            "pokemonCardSetDetailsScreen" -> PokemonCardSetDetailsBottomNavBar(navController)
-//                        }
                     }
                 ) { innerPadding ->
                     NavHost(
@@ -78,13 +61,13 @@ class MainActivity : ComponentActivity() {
                         startDestination = "allPokemonCardsScreen",
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable("accountScreen") { AccountScreen() }
+//                        composable("accountScreen") { AccountScreen() }
                         composable("allPokemonCardsScreen") { AllPokemonCardsScreen(navController) }
-                        composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
-                        composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
-                        composable("pokemonCardDetailsScreen") { PokemonCardDetailsScreen() }
+//                        composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
+//                        composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
+                        composable("pokemonCardDetailsScreen") { PokemonCardDetailsScreen(navController) }
                         composable("pokemonCardSetScreen") { PokemonCardSetScreen(navController) }
-                        composable("pokemonCardSetDetailsScreen") { PokemonCardSetDetailsScreen() }
+                        composable("pokemonCardSetDetailsScreen") { PokemonCardSetDetailsScreen(navController) }
                         composable("scanCardsScreen") { ScanCardsScreen(navController) }
                     }
                 }
