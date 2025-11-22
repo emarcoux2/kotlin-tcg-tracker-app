@@ -15,13 +15,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
-import com.example.tcgtracker.navigation.AccountBottomNavBar
-import com.example.tcgtracker.navigation.AllPokemonCardsBottomNavBar
-import com.example.tcgtracker.navigation.FavouritePokemonCardsBottomNavBar
-import com.example.tcgtracker.navigation.MyPokemonCardsBottomNavBar
-import com.example.tcgtracker.navigation.PokemonCardDetailsBottomNavBar
-import com.example.tcgtracker.navigation.PokemonCardSetBottomNavBar
-import com.example.tcgtracker.navigation.PokemonCardSetDetailsBottomNavBar
+//import com.example.tcgtracker.navigation.AccountBottomNavBar
+//import com.example.tcgtracker.navigation.AllPokemonCardsBottomNavBar
+//import com.example.tcgtracker.navigation.FavouritePokemonCardsBottomNavBar
+import com.example.tcgtracker.navigation.MainBottomNavBar
+//import com.example.tcgtracker.navigation.MyPokemonCardsBottomNavBar
+//import com.example.tcgtracker.navigation.PokemonCardDetailsBottomNavBar
+//import com.example.tcgtracker.navigation.PokemonCardSetBottomNavBar
+//import com.example.tcgtracker.navigation.PokemonCardSetDetailsBottomNavBar
 import com.example.tcgtracker.screens.AccountScreen
 import com.example.tcgtracker.screens.AllPokemonCardsScreen
 import com.example.tcgtracker.screens.FavouritePokemonCardsScreen
@@ -43,6 +44,14 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
 
+                val showBottomBar = when (currentDestination) {
+                    "allPokemonCardsScreen",
+                    "scanCardsScreen",
+                    "pokemonCardSetScreen" -> true
+
+                    else -> false
+                }
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -50,15 +59,18 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     bottomBar = {
-                        when (currentDestination) {
-                            "accountScreen" -> AccountBottomNavBar(navController)
-                            "allPokemonCardsScreen" -> AllPokemonCardsBottomNavBar(navController)
-                            "favouritePokemonCardsScreen" -> FavouritePokemonCardsBottomNavBar(navController)
-                            "myPokemonCardsScreen" -> MyPokemonCardsBottomNavBar(navController)
-                            "pokemonCardDetailsScreen" -> PokemonCardDetailsBottomNavBar(navController)
-                            "pokemonCardSetScreen" -> PokemonCardSetBottomNavBar(navController)
-                            "pokemonCardSetDetailsScreen" -> PokemonCardSetDetailsBottomNavBar(navController)
+                        if (showBottomBar) {
+                            MainBottomNavBar(navController)
                         }
+//                        when (currentDestination) {
+//                            "accountScreen" -> AccountBottomNavBar(navController)
+//                            "allPokemonCardsScreen" -> AllPokemonCardsBottomNavBar(navController)
+//                            "favouritePokemonCardsScreen" -> FavouritePokemonCardsBottomNavBar(navController)
+//                            "myPokemonCardsScreen" -> MyPokemonCardsBottomNavBar(navController)
+//                            "pokemonCardDetailsScreen" -> PokemonCardDetailsBottomNavBar(navController)
+//                            "pokemonCardSetScreen" -> PokemonCardSetBottomNavBar(navController)
+//                            "pokemonCardSetDetailsScreen" -> PokemonCardSetDetailsBottomNavBar(navController)
+//                        }
                     }
                 ) { innerPadding ->
                     NavHost(
@@ -67,13 +79,13 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("accountScreen") { AccountScreen() }
-                        composable("allPokemonCardsScreen") { AllPokemonCardsScreen() }
+                        composable("allPokemonCardsScreen") { AllPokemonCardsScreen(navController) }
                         composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
                         composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
                         composable("pokemonCardDetailsScreen") { PokemonCardDetailsScreen() }
                         composable("pokemonCardSetScreen") { PokemonCardSetScreen() }
                         composable("pokemonCardSetDetailsScreen") { PokemonCardSetDetailsScreen() }
-                        composable("scanCardsScreen") { ScanCardsScreen() }
+                        composable("scanCardsScreen") { ScanCardsScreen(navController) }
                     }
                 }
             }
