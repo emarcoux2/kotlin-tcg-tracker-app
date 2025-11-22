@@ -1,11 +1,12 @@
 package com.example.tcgtracker.destinations
 
 open class Destination(val route: String, val label: String) {
-    object AllPokemonCardsScreen: Destination("allPokemonCardsScreen", "All Pokemon Cards")
-    object FavouritePokemonCardsScreen: Destination("favouritePokemonCardsScreen", "Favourites")
-    object ScanCardsScreen: Destination("scanCardsScreen", "Scan Card")
-    object PokemonCardDetailsScreen: Destination("pokemonCardDetailsScreen", "Details")
-    object PokemonCardSetScreen: Destination("pokemonCardSetScreen", "Pokemon Card Set")
-    object PokemonCardSetDetailsScreen: Destination("pokemonCardSetDetailsScreen", "Details")
-    object MyPokemonCardsScreen: Destination("myPokemonCardsScreen", "My Pokemon Cards")
+    object AllPokemonCards: Destination("allPokemonCardsScreen", "All Pokemon Cards")
+    object FavouritePokemonCards: Destination("favouritePokemonCardsScreen", "Favourites")
+    object ScanCards: Destination("scanCardsScreen", "Scan Card")
+    object PokemonCardDetails: Destination("pokemonCardDetailsScreen/{cardId}", "Details")
+    object PokemonCardSet: Destination("pokemonCardSetScreen", "Pokemon Card Set")
+    object PokemonCardSetDetails: Destination("pokemonCardSetDetailsScreen", "Details")
+    object MyPokemonCards: Destination("myPokemonCardsScreen", "My Pokemon Cards")
+    object Account: Destination("accountScreen", "Account")
 }
