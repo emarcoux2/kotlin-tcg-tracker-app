@@ -83,7 +83,7 @@ class MainActivity : ComponentActivity() {
                         composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
                         composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
                         composable("pokemonCardDetailsScreen") { PokemonCardDetailsScreen() }
-                        composable("pokemonCardSetScreen") { PokemonCardSetScreen() }
+                        composable("pokemonCardSetScreen") { PokemonCardSetScreen(navController) }
                         composable("pokemonCardSetDetailsScreen") { PokemonCardSetDetailsScreen() }
                         composable("scanCardsScreen") { ScanCardsScreen(navController) }
                     }
