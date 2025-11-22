@@ -1,4 +1,11 @@
 package com.example.tcgtracker.screens
 
-class PokemonCardSetScreen {
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import com.example.tcgtracker.ui.ScreenLabel
+
+@Composable
+fun PokemonCardSetScreen() {
+    ScreenLabel("Pokemon Card Set")
 }
