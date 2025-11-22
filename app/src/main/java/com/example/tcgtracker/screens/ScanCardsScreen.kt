@@ -26,8 +26,8 @@ fun ScanCardsScreen(navController: NavController) {
         FloatingActionButton(
             onClick = { navController.popBackStack() },
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 16.dp, bottom = 90.dp)
+                .align(Alignment.BottomEnd)
+                .padding(end = 16.dp, bottom = 90.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
