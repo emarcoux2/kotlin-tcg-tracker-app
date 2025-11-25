@@ -46,12 +46,12 @@ Usage:
 - Use the camera to capture a card.
 - Extracted text is displayed and saved in the local database.
 - Browse all cards and view details.
-- Log in to view cards not fetched from the API.
+- Logged-in users can view manually added cards.
 - Add a card to the favourites list for easy viewing.
 
 Planned Features:
 - Full OCR implementation for card scanning.
 - Integration with Pokémon TCG API for card and set details.
-- Bottom navigation for quick access between screens.
+- Bottom navigation for logged-in users.
 - Log in functionality.
-- Favorites and search functionality for scanned cards.
+- Favourites and search functionality for scanned cards.
