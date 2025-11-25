@@ -1,4 +1,4 @@
-Created using Kotlin + Jetpack Compose, I created TCG Tracker, an app that's using OCR (Optical Character Recognition), storing cards locally, fetching card information from an API, and saving a logged-in user's personal collection toa database (most likely Room, but will be implemented in the future).
+Created using Kotlin + Jetpack Compose, I created TCG Tracker, an app that's using OCR (Optical Character Recognition), storing cards locally, fetching card information from an API, and saving a logged-in user's personal collection to a database (most likely Room, but will be implemented in the future).
 
 Features:
 - Scan physical cards with the device camera.
