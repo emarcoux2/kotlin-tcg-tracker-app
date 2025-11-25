@@ -32,7 +32,6 @@ import com.example.tcgtracker.ui.ScreenLabel
  *
  * @param navController - The object responsible for navigation between composable screens.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokemonCardDetailsScreen(navController: NavController) {
     Box(
