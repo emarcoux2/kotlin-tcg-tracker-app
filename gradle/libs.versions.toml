@@ -1,5 +1,6 @@
 [versions]
 agp = "8.12.3"
+javaSdk = "{Version}"
 kotlin = "2.0.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -11,9 +12,11 @@ composeBom = "2024.09.00"
 navigationRuntimeKtx = "2.9.6"
 composeNavigation = "1.5.5"
 navigationCompose = "2.9.6"
+tcgdex = "2.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+java-sdk = { module = "net.tcgdex:java-sdk", version.ref = "javaSdk" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -30,6 +33,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 androidx-compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version.ref = "composeNavigation" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+tcgdex-sdk = { group = "net.tcgdex", name = "java-sdk", version.ref = "tcgdex" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
