@@ -1,4 +1,4 @@
-package com.example.tcgtracker.ui
+package com.example.tcgtracker.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

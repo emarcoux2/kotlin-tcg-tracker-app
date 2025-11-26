@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.tcgtracker.R
-import com.example.tcgtracker.ui.ScreenLabel
+import com.example.tcgtracker.components.ScreenLabel
 
 /**
  * Displays all Pokemon card sets.

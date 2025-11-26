@@ -15,7 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
-import com.example.tcgtracker.navigation.MainBottomNavBar
+import com.example.tcgtracker.components.navigation.MainBottomNavBar
 import com.example.tcgtracker.screens.AllPokemonCardsScreen
 import com.example.tcgtracker.screens.PokemonCardDetailsScreen
 import com.example.tcgtracker.screens.PokemonCardSetDetailsScreen

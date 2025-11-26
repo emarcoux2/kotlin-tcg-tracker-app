@@ -11,4 +11,5 @@ package com.example.tcgtracker.api
  * Will be implemented in the future.
  */
 object PokemonTcgApi {
+
 }

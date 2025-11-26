@@ -1,4 +1,4 @@
-package com.example.tcgtracker.navigation
+package com.example.tcgtracker.components.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
