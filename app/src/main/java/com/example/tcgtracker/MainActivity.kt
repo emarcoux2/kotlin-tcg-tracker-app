@@ -7,21 +7,31 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
+import com.example.tcgtracker.components.navigation.AccountBottomNavBar
+import com.example.tcgtracker.components.navigation.KebabMenu
 import com.example.tcgtracker.components.navigation.MainBottomNavBar
+import com.example.tcgtracker.screens.AccountScreen
 import com.example.tcgtracker.screens.AllPokemonCardsScreen
+import com.example.tcgtracker.screens.FavouritePokemonCardsScreen
+import com.example.tcgtracker.screens.MyPokemonCardsScreen
 import com.example.tcgtracker.screens.PokemonCardDetailsScreen
 import com.example.tcgtracker.screens.PokemonCardSetDetailsScreen
 import com.example.tcgtracker.screens.PokemonCardSetScreen
 import com.example.tcgtracker.screens.ScanCardsScreen
 import com.example.tcgtracker.ui.theme.TCGTrackerTheme
+import kotlinx.coroutines.launch
 
 /**
  * Displays the bottom navbar on certain screens. The user currently begins on
@@ -34,13 +44,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TCGTrackerTheme {
+                val snackbarHostState = remember { SnackbarHostState() }
+                val scope = rememberCoroutineScope()
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
 
-                val showBottomBar = when (currentDestination) {
+                val showMainBottomNavBar = when (currentDestination) {
                     "allPokemonCardsScreen",
-                    "scanCardsScreen",
                     "pokemonCardSetScreen",
                     "pokemonCardDetailsScreen",
                     "pokemonCardSetDetailsScreen" -> true
@@ -48,15 +59,38 @@ class MainActivity : ComponentActivity() {
                     else -> false
                 }
 
+                val showAccountBottomNavBar = when (currentDestination) {
+                    "accountScreen",
+                    "favouritePokemonCardsScreen",
+                    "myPokemonCardsScreen" -> true
+
+                    else -> false
+                }
+
                 Scaffold(
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
                     topBar = {
                         TopAppBar(
-                            title = { Text("TCG Tracker") }
+                            title = { Text("TCG Tracker") },
+                            actions = {
+                                KebabMenu(
+                                    navController = navController,
+                                    onShowMessage = { message ->
+                                        scope.launch {
+                                            snackbarHostState.showSnackbar(message)
+                                        }
+                                    }
+                                )
+                            }
                         )
                     },
                     bottomBar = {
-                        if (showBottomBar) {
+                        if (showMainBottomNavBar) {
                             MainBottomNavBar(navController)
+                        }
+
+                        if (showAccountBottomNavBar) {
+                            AccountBottomNavBar(navController)
                         }
                     }
                 ) { innerPadding ->
@@ -65,10 +99,10 @@ class MainActivity : ComponentActivity() {
                         startDestination = "allPokemonCardsScreen",
                         modifier = Modifier.padding(innerPadding)
                     ) {
-//                        composable("accountScreen") { AccountScreen() }
+                        composable("accountScreen") { AccountScreen() }
                         composable("allPokemonCardsScreen") { AllPokemonCardsScreen(navController) }
-//                        composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
-//                        composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
+                        composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
+                        composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
                         composable("pokemonCardDetailsScreen") { PokemonCardDetailsScreen(navController) }
                         composable("pokemonCardSetScreen") { PokemonCardSetScreen(navController) }
                         composable("pokemonCardSetDetailsScreen") { PokemonCardSetDetailsScreen(navController) }
