@@ -13,11 +13,23 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.tcgtracker.R
 import com.example.tcgtracker.destinations.Destination
 
+/**
+ * Represents an item for an Account Nav Bar.
+ *
+ * @property destination - The destination to go to when navigating.
+ * @property icon - The Nav Bar icon.
+ */
 data class AccountNavItem(
     val destination: Destination,
     val icon: Painter
 )
 
+/**
+ * Displays the account bottom navigation bar on all screens.
+ * This nav bar is only available for logged-in users.
+ *
+ * @param navController - The object responsible for navigation between composable screens.
+ */
 @Composable
 fun AccountBottomNavBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()

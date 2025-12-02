@@ -27,7 +27,10 @@ import com.example.tcgtracker.destinations.Destination
  * Some of the structure of this menu comes from:
  * https://developer.android.com/develop/ui/compose/components/menu
  *
+ * Opens and displays a dropdown menu of additional options for the user.
  *
+ * @param navController - The object responsible for navigation between composable screens.
+ * @param onShowMessage - Displays a Snackbar message when certain menu options are clicked.
  */
 @Composable
 fun KebabMenu(
