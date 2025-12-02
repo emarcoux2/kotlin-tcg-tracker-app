@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.tcgtracker"
-        minSdk = 25
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.java.sdk)
     implementation(libs.tcgdex.sdk)
     implementation(libs.protolite.well.known.types)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
