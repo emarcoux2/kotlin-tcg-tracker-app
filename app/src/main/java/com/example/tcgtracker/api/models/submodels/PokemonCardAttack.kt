@@ -3,7 +3,7 @@ package com.example.tcgtracker.api.models.submodels
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CardAttack(
+data class PokemonCardAttack(
     val cost: List<String> = emptyList(),
     val name: String,
     val damage: String? = null,
