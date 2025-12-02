@@ -1,6 +1,4 @@
-package com.example.tcgtracker.api
-
-import net.tcgdex.sdk.TCGdex
+package com.example.tcgtracker.api.data
 
 /**
  * Provides access to The Pokemon TCG API for retrieving card and set information.

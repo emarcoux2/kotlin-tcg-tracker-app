@@ -1,4 +1,4 @@
-package com.example.tcgtracker.api
+package com.example.tcgtracker.api.data
 
 /**
  * Provides central access for interacting with the Pokemon API.
