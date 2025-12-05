@@ -1,4 +1,4 @@
-package com.example.tcgtracker.screens
+package com.example.tcgtracker.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -27,12 +27,12 @@ import com.example.tcgtracker.R
 import com.example.tcgtracker.components.ScreenLabel
 
 /**
- * Displays the details of an individual Pokemon card.
+ * Displays the details of an individual Pokemon card set.
  *
  * @param navController - The object responsible for navigation between composable screens.
  */
 @Composable
-fun PokemonCardDetailsScreen(navController: NavController) {
+fun PokemonCardSetDetailsScreen(navController: NavController) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -44,8 +44,8 @@ fun PokemonCardDetailsScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_card_details),
-                contentDescription = "Card Image",
+                painter = painterResource(id = R.drawable.ic_card_set_details),
+                contentDescription = "Card Set Image",
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(0.7f)
@@ -53,12 +53,12 @@ fun PokemonCardDetailsScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Card Name: Placeholder", style = MaterialTheme.typography.titleMedium)
-            Text(text = "Card Type: Placeholder", style = MaterialTheme.typography.bodyMedium)
+            Text(text = "Card Set Name: Placeholder", style = MaterialTheme.typography.titleMedium)
+            Text(text = "Number of cards in set: 100", style = MaterialTheme.typography.bodyMedium)
             Text(text = "Card Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et.", style = MaterialTheme.typography.bodySmall)
         }
 
-        ScreenLabel("Pokemon Card Details")
+        ScreenLabel("Pokemon Card Set Details")
 
         FloatingActionButton(
             onClick = { navController.popBackStack() },

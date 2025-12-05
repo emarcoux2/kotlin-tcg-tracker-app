@@ -1,4 +1,4 @@
-package com.example.tcgtracker.screens
+package com.example.tcgtracker.ui.screens
 
 import androidx.compose.runtime.Composable
 import com.example.tcgtracker.components.ScreenLabel

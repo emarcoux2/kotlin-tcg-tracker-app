@@ -22,14 +22,14 @@ import androidx.navigation.compose.composable
 import com.example.tcgtracker.components.navigation.AccountBottomNavBar
 import com.example.tcgtracker.components.navigation.KebabMenu
 import com.example.tcgtracker.components.navigation.MainBottomNavBar
-import com.example.tcgtracker.screens.AccountScreen
-import com.example.tcgtracker.screens.AllPokemonCardsScreen
-import com.example.tcgtracker.screens.FavouritePokemonCardsScreen
-import com.example.tcgtracker.screens.MyPokemonCardsScreen
-import com.example.tcgtracker.screens.PokemonCardDetailsScreen
-import com.example.tcgtracker.screens.PokemonCardSetDetailsScreen
+import com.example.tcgtracker.ui.screens.AccountScreen
+import com.example.tcgtracker.ui.screens.AllPokemonCardsScreen
+import com.example.tcgtracker.ui.screens.FavouritePokemonCardsScreen
+import com.example.tcgtracker.ui.screens.MyPokemonCardsScreen
+import com.example.tcgtracker.ui.screens.PokemonCardDetailsScreen
+import com.example.tcgtracker.ui.screens.PokemonCardSetDetailsScreen
 import com.example.tcgtracker.screens.PokemonCardSetScreen
-import com.example.tcgtracker.screens.ScanCardsScreen
+import com.example.tcgtracker.ui.screens.ScanCardsScreen
 import com.example.tcgtracker.ui.theme.TCGTrackerTheme
 import kotlinx.coroutines.launch
 
