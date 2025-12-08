@@ -1,6 +1,5 @@
 package com.example.tcgtracker.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,25 +15,19 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.tcgtracker.R
-import com.example.tcgtracker.components.ScreenLabel
-import com.example.tcgtracker.viewmodels.PokemonCardSetViewModel
-import com.example.tcgtracker.viewmodels.PokemonCardsViewModel
+import com.example.tcgtracker.viewmodels.PokemonCardSetsViewModel
 import net.tcgdex.sdk.Extension
-import net.tcgdex.sdk.Quality
 
 /**
- * Displays all Pokemon cards.
+ * Displays all Pokemon card sets.
  *
  * @param navController - The object responsible for navigation between composable screens.
  * @param viewModel -
@@ -42,11 +35,15 @@ import net.tcgdex.sdk.Quality
 @Composable
 fun AllPokemonCardSetsScreen(
     navController: NavController,
-    viewModel: PokemonCardSetViewModel = viewModel()
+    viewModel: PokemonCardSetsViewModel = viewModel(),
+    cardSeriesId: String? = null
 ) {
-
     val pokemonCardSets by viewModel.allPokemonCardSetPreviews.collectAsState()
-    val fullCardSets by viewModel.loadedCardSets.collectAsState()
+
+    val filteredCardSets = cardSeriesId?.let { id ->
+        pokemonCardSets.filter { it.serie.id == id }
+    } ?: pokemonCardSets
+
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
 
@@ -72,13 +69,8 @@ fun AllPokemonCardSetsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(pokemonCardSets) { setResume ->
-            LaunchedEffect(setResume.id) {
-                viewModel.fetchFullCardSet(setResume.id)
-            }
-
-            val fullCardSet = fullCardSets[setResume.id]
-            val logoUrl = fullCardSet?.getLogoUrl(Quality.HIGH, Extension.WEBP) ?: ""
+        items(filteredCardSets) { setResume ->
+            val logoUrl = setResume.getLogoUrl(Extension.PNG) ?: ""
 
             Column(
                 modifier = Modifier
