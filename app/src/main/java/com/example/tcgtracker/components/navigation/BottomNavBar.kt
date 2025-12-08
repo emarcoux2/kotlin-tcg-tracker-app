@@ -36,7 +36,7 @@ fun MainBottomNavBar(navController: NavController) {
 
     val ic_all_cards = painterResource(id = R.drawable.ic_all_cards)
     val ic_scan = painterResource(id = R.drawable.ic_scan)
-    val ic_all_card_series = painterResource(id = R.drawable.ic_all_card_sets)
+    val ic_all_card_series = painterResource(id = R.drawable.ic_all_card_series)
 
     val items = listOf(
         BottomNavItem(Destination.AllPokemonCards, ic_all_cards),
@@ -62,6 +62,31 @@ fun MainBottomNavBar(navController: NavController) {
                     )
                 },
                 label = { Text(item.destination.label) }
+            )
+        }
+    }
+}
+
+@Composable
+fun PokemonCardSetsBottomNavBar(navController: NavController) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination?.route
+
+    val ic_all_card_sets = painterResource(id = R.drawable.ic_all_card_sets)
+    val ic_scan = painterResource(id = R.drawable.ic_scan)
+    val ic_all_cards = painterResource(id = R.drawable.ic_all_cards)
+
+    NavigationBar {
+        listOf(
+            Destination.AllPokemonCardSets to ic_all_card_sets,
+            Destination.ScanCards to ic_scan,
+            Destination.AllPokemonCards to ic_all_cards
+        ).forEach { (destination, iconPainter) ->
+            NavigationBarItem(
+                selected = currentDestination == destination.route,
+                onClick = { navController.navigate(destination.route) },
+                icon = { Icon(painter = iconPainter, contentDescription = destination.label) },
+                label = { Text(destination.label) }
             )
         }
     }
@@ -202,32 +227,7 @@ fun MainBottomNavBar(navController: NavController) {
 //    }
 //}
 //
-//@Composable
-//fun PokemonCardSetDetailsBottomNavBar(navController: NavController) {
-//    val navBackStackEntry by navController.currentBackStackEntryAsState()
-//    val currentDestination = navBackStackEntry?.destination?.route
-//
-//    val ic_all_cards = painterResource(id = R.drawable.ic_all_cards)
-//    val ic_scan = painterResource(id = R.drawable.ic_scan)
-//    val ic_all_card_sets = painterResource(id = R.drawable.ic_all_card_sets)
-//    val ic_account = painterResource(id = R.drawable.ic_account)
-//
-//    NavigationBar {
-//        listOf(
-//            Destination.AllPokemonCards to ic_all_cards,
-//            Destination.ScanCards to ic_scan,
-//            Destination.PokemonCardSet to ic_all_card_sets,
-//            Destination.Account to ic_account
-//        ).forEach { (destination, iconPainter) ->
-//            NavigationBarItem(
-//                selected = currentDestination == destination.route,
-//                onClick = { navController.navigate(destination.route) },
-//                icon = { Icon(painter = iconPainter, contentDescription = destination.label) },
-//                label = { Text(destination.label) }
-//            )
-//        }
-//    }
-//}
+
 //
 //@Composable
 //fun AccountBottomNavBar(navController: NavController) {
