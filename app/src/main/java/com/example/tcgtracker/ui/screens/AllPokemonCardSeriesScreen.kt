@@ -39,7 +39,6 @@ fun AllPokemonCardSeriesScreen(
 ) {
 
     val pokemonCardSeries by viewModel.allPokemonCardSeries.collectAsState()
-    val fullCardSeries by viewModel.loadedCardSeries.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
 
@@ -67,12 +66,11 @@ fun AllPokemonCardSeriesScreen(
     ) {
         items(pokemonCardSeries) { setResume ->
             val logoUrl = setResume.getLogoUrl(Extension.PNG)
-            val name = setResume.name
 
             Column(
                 modifier = Modifier
                     .clickable {
-                        setResume.id.let { navController.navigate("allPokemonCardSetsScreen/$it") }
+                        navController.navigate("pokemonCardSetsBySeriesScreen/${setResume.id}")
                     }
             ) {
                 AsyncImage(
