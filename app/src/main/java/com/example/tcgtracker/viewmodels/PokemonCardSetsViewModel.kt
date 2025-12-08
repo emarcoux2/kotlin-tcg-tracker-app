@@ -1,6 +1,5 @@
 package com.example.tcgtracker.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tcgtracker.api.PokemonTCGdexService
@@ -8,9 +7,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import net.tcgdex.sdk.internal.Model
-import net.tcgdex.sdk.models.Card
-import net.tcgdex.sdk.models.CardResume
+import net.tcgdex.sdk.models.Set
 import net.tcgdex.sdk.models.SetResume
 
 /**
@@ -20,16 +17,18 @@ import net.tcgdex.sdk.models.SetResume
  * This ViewModel will:
  *
  *
- * Will be implemented in the future.
  */
-class PokemonCardSetViewModel(
+class PokemonCardSetsViewModel(
     private val service: PokemonTCGdexService = PokemonTCGdexService()
 ) : ViewModel() {
+
+    // set previews
     private var _allPokemonCardSetPreviews = MutableStateFlow<List<SetResume>>(emptyList())
     var allPokemonCardSetPreviews: StateFlow<List<SetResume>> = _allPokemonCardSetPreviews
 
-    private val _loadedCardSets = MutableStateFlow<Map<String, Model>>(emptyMap())
-    val loadedCardSets: StateFlow<Map<String, Model>> = _loadedCardSets
+    // full sets
+    private val _loadedCardSets = MutableStateFlow<Map<String, Set>>(emptyMap())
+    val loadedCardSets: StateFlow<Map<String, Set>> = _loadedCardSets
 
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading

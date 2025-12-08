@@ -15,11 +15,7 @@ import net.tcgdex.sdk.models.CardResume
  * All Pokemon Cards screen.
  *
  * This ViewModel will:
- * - Handle managing UI state for scanning cards
- * - Coordinate actions triggered by the UI, like saving scanned card data
- *   or fetching related info from the API or local database.
  *
- * Will be implemented in the future.
  */
 class PokemonCardsViewModel(
     private val service: PokemonTCGdexService = PokemonTCGdexService()
