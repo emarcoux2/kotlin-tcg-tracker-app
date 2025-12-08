@@ -77,7 +77,7 @@ fun AllPokemonCardsScreen(
             Column(
                 modifier = Modifier
                     .clickable {
-                        navController.navigate("cardDetails/${cardResume.id}")
+                        navController.navigate("pokemonCardDetailsScreen/${cardResume.id}")
                     }
             ) {
                 AsyncImage(
