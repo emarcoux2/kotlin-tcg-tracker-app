@@ -11,12 +11,15 @@ package com.example.tcgtracker.destinations
  * like a bottom nav bar.
  */
 open class Destination(val route: String, val label: String) {
-    object AllPokemonCards: Destination("allPokemonCardsScreen", "All Pokemon Cards")
-    object FavouritePokemonCards: Destination("favouritePokemonCardsScreen", "Favourites")
-    object ScanCards: Destination("scanCardsScreen", "Scan Card")
-    object PokemonCardDetails: Destination("pokemonCardDetailsScreen/{cardId}", "Details")
-    object PokemonCardSet: Destination("pokemonCardSetScreen", "Pokemon Card Set")
-    object PokemonCardSetDetails: Destination("pokemonCardSetDetailsScreen/{cardSetId}", "Details")
-    object MyPokemonCards: Destination("myPokemonCardsScreen", "My Pokemon Cards")
     object Account: Destination("accountScreen", "Account")
+    object FavouritePokemonCards: Destination("favouritePokemonCardsScreen", "Favourites")
+    object MyPokemonCards: Destination("myPokemonCardsScreen", "My Pokemon Cards")
+    object ScanCards: Destination("scanCardsScreen", "Scan Card")
+
+    object AllPokemonCards: Destination("allPokemonCardsScreen", "All Pokemon Cards")
+    object PokemonCardDetails: Destination("pokemonCardDetailsScreen/{cardId}", "Details")
+    object AllPokemonCardSets: Destination("allPokemonCardSetsScreen", "Pokemon Card Set")
+    object PokemonCardSetDetails: Destination("pokemonCardSetDetailsScreen/{cardSetId}", "Details")
+    object AllPokemonCardSeries: Destination("allPokemonCardSeriesScreen", "All Card Series")
+    object PokemonCardSeriesDetails: Destination("pokemonCardSeriesDetails", "Details")
 }

@@ -23,12 +23,14 @@ import com.example.tcgtracker.components.navigation.AccountBottomNavBar
 import com.example.tcgtracker.components.navigation.KebabMenu
 import com.example.tcgtracker.components.navigation.MainBottomNavBar
 import com.example.tcgtracker.ui.screens.AccountScreen
+import com.example.tcgtracker.ui.screens.AllPokemonCardSeriesScreen
 import com.example.tcgtracker.ui.screens.AllPokemonCardsScreen
 import com.example.tcgtracker.ui.screens.FavouritePokemonCardsScreen
 import com.example.tcgtracker.ui.screens.MyPokemonCardsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardDetailsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardSetDetailsScreen
-import com.example.tcgtracker.screens.PokemonCardSetScreen
+import com.example.tcgtracker.ui.screens.AllPokemonCardSetsScreen
+import com.example.tcgtracker.ui.screens.PokemonCardSeriesDetailsScreen
 import com.example.tcgtracker.ui.screens.ScanCardsScreen
 import com.example.tcgtracker.ui.theme.TCGTrackerTheme
 import kotlinx.coroutines.launch
@@ -52,7 +54,8 @@ class MainActivity : ComponentActivity() {
 
                 val showMainBottomNavBar = when (currentDestination) {
                     "allPokemonCardsScreen",
-                    "pokemonCardSetScreen",
+                    "allPokemonCardSeriesScreen",
+                    "allPokemonCardSetsScreen",
                     "pokemonCardDetailsScreen",
                     "pokemonCardSetDetailsScreen" -> true
 
@@ -104,7 +107,15 @@ class MainActivity : ComponentActivity() {
                         composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
                         composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
                         composable("pokemonCardDetailsScreen") { PokemonCardDetailsScreen(navController) }
-                        composable("pokemonCardSetScreen") { PokemonCardSetScreen(navController) }
+                        composable("allPokemonCardSeriesScreen") { AllPokemonCardSeriesScreen(navController) }
+                        composable("seriesDetails/{id}") { backStackEntry ->
+                            val id = backStackEntry.arguments?.getString("id")!!
+                            PokemonCardSeriesDetailsScreen(id = id)
+                        }
+                        composable("allPokemonCardSetsScreen/{seriesId}") { backStackEntry ->
+                            val cardSeriesId = backStackEntry.arguments?.getString("seriesId")
+                            AllPokemonCardSetsScreen(navController, cardSeriesId = cardSeriesId)
+                        }
                         composable("pokemonCardSetDetailsScreen") { PokemonCardSetDetailsScreen(navController) }
                         composable("scanCardsScreen") { ScanCardsScreen(navController) }
                     }
