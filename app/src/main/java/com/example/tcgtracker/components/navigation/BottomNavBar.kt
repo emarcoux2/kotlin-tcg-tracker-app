@@ -36,12 +36,12 @@ fun MainBottomNavBar(navController: NavController) {
 
     val ic_all_cards = painterResource(id = R.drawable.ic_all_cards)
     val ic_scan = painterResource(id = R.drawable.ic_scan)
-    val ic_all_card_sets = painterResource(id = R.drawable.ic_all_card_sets)
+    val ic_all_card_series = painterResource(id = R.drawable.ic_all_card_sets)
 
     val items = listOf(
         BottomNavItem(Destination.AllPokemonCards, ic_all_cards),
         BottomNavItem(Destination.ScanCards, ic_scan),
-        BottomNavItem(Destination.PokemonCardSet, ic_all_card_sets)
+        BottomNavItem(Destination.PokemonCardSeries, ic_all_card_series)
     )
 
     NavigationBar {
