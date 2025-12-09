@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,16 +39,23 @@ fun AllPokemonCardSetsScreen(
     viewModel: PokemonCardSetsViewModel = viewModel(),
     cardSeriesId: String? = null
 ) {
-    val pokemonCardSets by viewModel.allPokemonCardSetPreviews.collectAsState()
-
-    val filteredCardSets = cardSeriesId?.let { id ->
-        pokemonCardSets.filter { it.serie.id == id }
-    } ?: pokemonCardSets
+    val pokemonCardSetPreviews by viewModel.allPokemonCardSetPreviews.collectAsState()
+    val loadedCardSets by viewModel.loadedCardSets.collectAsState()
 
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    if (loading) {
+    LaunchedEffect(pokemonCardSetPreviews) {
+        pokemonCardSetPreviews.forEach { preview ->
+            viewModel.fetchFullCardSet(preview.id)
+        }
+    }
+
+    val filteredCardSets = cardSeriesId?.let { id ->
+        loadedCardSets.values.filter { it.serie.id == id }
+    } ?: loadedCardSets.values.toList()
+
+    if (loading || filteredCardSets.isEmpty()) {
         Box(Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
@@ -69,26 +77,28 @@ fun AllPokemonCardSetsScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(filteredCardSets) { setResume ->
-            val logoUrl = setResume.getLogoUrl(Extension.PNG) ?: ""
+        items(filteredCardSets) { set ->
+            val logoUrl = set.getLogoUrl(Extension.PNG) ?: ""
 
             Column(
                 modifier = Modifier
                     .clickable {
-                        navController.navigate("setDetails/${setResume.id}")
+                        navController.navigate("setDetails/${set.id}")
                     }
             ) {
                 AsyncImage(
                     model = logoUrl,
-                    contentDescription = setResume.name,
+                    contentDescription = set.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(0.7f)
                 )
-                Text(
-                    text = setResume.name,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
+                set.name?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.tcgtracker
 
+import android.R.attr.type
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,10 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.tcgtracker.components.navigation.AccountBottomNavBar
 import com.example.tcgtracker.components.navigation.KebabMenu
 import com.example.tcgtracker.components.navigation.MainBottomNavBar
@@ -132,7 +135,13 @@ class MainActivity : ComponentActivity() {
                             val seriesId = backStackEntry.arguments?.getString("seriesId")
                             PokemonCardSetsBySeriesScreen(navController, cardSeriesId = seriesId)
                         }
-                        composable("pokemonCardSetDetailsScreen") { PokemonCardSetDetailsScreen(navController) }
+                        composable(
+                            "pokemonCardSetDetailsScreen/{setId}",
+                            arguments = listOf(navArgument("setId") { type = NavType.StringType })
+                        ) {
+                            val setId = it.arguments?.getString("setId")!!
+                            PokemonCardSetDetailsScreen(navController, setId)
+                        }
                     }
                 }
             }
