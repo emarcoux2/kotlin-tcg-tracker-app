@@ -18,9 +18,9 @@ open class Destination(val route: String, val label: String) {
 
     object AllPokemonCards: Destination("allPokemonCardsScreen", "All Pokemon Cards")
     object PokemonCardDetails: Destination("pokemonCardDetailsScreen/{cardId}", "Details")
-    object AllPokemonCardSets: Destination("allPokemonCardSetsScreen", "Pokemon Card Sets")
+    object AllPokemonCardSets: Destination("allPokemonCardSetsScreen", "All Card Sets")
     object PokemonCardSetDetails: Destination("pokemonCardSetDetailsScreen/{cardSetId}", "Details")
-    object PokemonCardSeries: Destination("pokemonCardSeriesScreen", "All Card Series")
+    object AllPokemonCardSeries: Destination("pokemonCardSeriesScreen", "All Card Series")
     object PokemonCardSeriesDetails: Destination("pokemonCardSeriesDetails", "Details")
     object PokemonCardSetsBySeries: Destination("pokemonCardSetsBySeries/{cardSeriesId}", "All Pokemon Cards")
 }
