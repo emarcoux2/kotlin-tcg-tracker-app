@@ -33,6 +33,7 @@ import net.tcgdex.sdk.Extension
  * @param navController - The object responsible for navigation between composable screens.
  * @param viewModel - The PokemonCardSetsViewModel providing the state and actions
  * for this screen.
+ * @param cardSeriesId - The ID of the series whose sets should be displayed.
  */
 @Composable
 fun AllPokemonCardSetsScreen(
