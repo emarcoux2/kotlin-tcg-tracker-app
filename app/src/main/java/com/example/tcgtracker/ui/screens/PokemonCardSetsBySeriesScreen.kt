@@ -75,7 +75,7 @@ fun PokemonCardSetsBySeriesScreen(
 
             Column(
                 modifier = Modifier.clickable {
-                    navController.navigate("setDetails/${set.id}")
+                    navController.navigate("pokemonCardSetDetailsScreen/${set.id}")
                 }
             ) {
                 AsyncImage(
