@@ -87,10 +87,12 @@ fun AllPokemonCardsScreen(
                         .fillMaxWidth()
                         .aspectRatio(0.7f)
                 )
-                Text(
-                    text = cardResume.name,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
+                cardResume.name?.let {
+                    Text(
+                        text = it,
+                        modifier = Modifier.padding(top = 4.dp),
+                    )
+                }
             }
         }
     }

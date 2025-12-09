@@ -14,9 +14,7 @@ import net.tcgdex.sdk.models.SetResume
  * This service will:
  * - Fetch lists of Pokemon cards and their sets
  * - Retrieve details for individual cards and sets
- * - Handling network requests and responses.
  *
- * Will be implemented in the future.
  */
 class PokemonTCGdexService(
     private val tcgdex: TCGdex = TCGdex("en")

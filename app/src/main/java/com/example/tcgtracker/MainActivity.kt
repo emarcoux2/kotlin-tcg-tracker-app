@@ -38,6 +38,8 @@ import com.example.tcgtracker.ui.screens.PokemonCardSeriesDetailsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardSetsBySeriesScreen
 import com.example.tcgtracker.ui.screens.ScanCardsScreen
 import com.example.tcgtracker.ui.theme.TCGTrackerTheme
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 
 /**
@@ -56,6 +58,8 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
+
+                val fs_db = Firebase.firestore
 
                 val showMainBottomNavBar = when (currentDestination) {
                     "allPokemonCardsScreen",
