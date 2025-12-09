@@ -28,6 +28,14 @@ import com.example.tcgtracker.viewmodels.PokemonCardSeriesViewModel
 import com.example.tcgtracker.viewmodels.PokemonCardSetsViewModel
 import net.tcgdex.sdk.Extension
 
+/**
+ * Displays details for a specific card series.
+ *
+ * @param id - The ID of the series to display.
+ * @param setsViewModel - The PokemonCardSetsViewModel managing the sets for this series.
+ * @param seriesViewModel - The PokemonCardSeriesViewModel managing series-related
+ * state and actions.
+ */
 @Composable
 fun PokemonCardSeriesDetailsScreen (
     id: String,

@@ -10,30 +10,71 @@ import com.example.tcgtracker.db.entities.PokemonCardSetEntity
 
 @Dao
 interface PokemonCardSetDao {
+
+    /**
+     * Inserts a single card set into the database.
+     * If a set with the same ID already exists, it will be replaced.
+     *
+     * @param set - The PokemonCardSetEntity to insert.
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSet(card: PokemonCardSetEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllSets(cards: List<PokemonCardSetEntity>)
+    /**
+     * Inserts a list of card sets into the database.
+     * Existing sets with the same IDs will be replaced.
+     *
+     * @param sets - The list of PokemonCardSetEntity objects to insert.
+     *
+     * Could be implemented in the future, for now we'll insert one set at a time.
+     */
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertAllSets(cards: List<PokemonCardSetEntity>)
 
-    // READ
-    @Query("SELECT * FROM pokemonCardSets")
+    /**
+     * Retrieves all card sets from the database.
+     *
+     * @return A list of all PokemonCardSetEntity objects stored in the database.
+     */
+    @Query("SELECT * FROM pokemonCardSet")
     suspend fun getAllSets(): List<PokemonCardSetEntity>
 
-    @Query("SELECT * FROM pokemonCardSets WHERE id = :setId")
+    /**
+     * Retrieves a specific card set by its ID.
+     *
+     * @param setId - The unique ID of the card set to retrieve.
+     * @return The PokemonCardSetEntity with the matching ID, or null if not found.
+     */
+    @Query("SELECT * FROM pokemonCardSet WHERE id = :setId")
     suspend fun getSetById(setId: String): PokemonCardSetEntity?
 
-    // UPDATE
+    /**
+     * Updates an existing card set in the database.
+     *
+     * @param set - The PokemonCardSetEntity with updated data.
+     */
     @Update
     suspend fun updateSet(set: PokemonCardSetEntity)
 
-    // DELETE
+    /**
+     * Deletes a specific card set from the database.
+     *
+     * @param set - The PokemonCardSetEntity to delete.
+     */
     @Delete
     suspend fun deleteSet(set: PokemonCardSetEntity)
 
-    @Query("DELETE FROM pokemonCardSets WHERE id = :setId")
+    /**
+     * Deletes a card set from the database by its ID.
+     *
+     * @param setId - The unique ID of the card set to delete.
+     */
+    @Query("DELETE FROM pokemonCardSet WHERE id = :setId")
     suspend fun deleteSetById(setId: String)
 
-    @Query("DELETE FROM pokemonCardSets")
+    /**
+     * Deletes all card sets from the database.
+     */
+    @Query("DELETE FROM pokemonCardSet")
     suspend fun deleteAllSets()
 }

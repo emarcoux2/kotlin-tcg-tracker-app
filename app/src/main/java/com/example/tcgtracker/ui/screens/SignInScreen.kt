@@ -27,6 +27,12 @@ import androidx.compose.ui.unit.dp
 import com.example.tcgtracker.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
+/**
+ * Displays the sign-in screen.
+ *
+ * @param context - The Context used for accessing resources and system services.
+ * @param modifier - Optional Modifier for styling or layout adjustments.
+ */
 @Composable
 fun SignInScreen(
     context: Context,

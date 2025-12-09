@@ -9,11 +9,11 @@ import net.tcgdex.sdk.models.Set
 import net.tcgdex.sdk.models.SetResume
 
 /**
- * Provides access to The Pokemon TCGdex API for retrieving card, set, and series information.
+ * Provides access to The Pokemon TCGdex API for retrieving cards, sets, and series information.
  *
  * This service will:
- * - Fetch lists of Pokemon cards and their sets
- * - Retrieve details for individual cards and sets
+ * - Fetch lists of Pokemon cards, series, and sets
+ * - Retrieve details for individual cards, series, and sets
  *
  */
 class PokemonTCGdexService(

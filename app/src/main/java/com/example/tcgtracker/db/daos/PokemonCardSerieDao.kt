@@ -10,30 +10,76 @@ import com.example.tcgtracker.db.entities.PokemonCardSerieEntity
 
 @Dao
 interface PokemonCardSerieDao {
+    /**
+     * Inserts a single series into the database.
+     *
+     * Replaces the series with the same primary key if it exists.
+     *
+     * @param serie - The series entity to insert.
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSerie(serie: PokemonCardSerieEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllSeries(series: List<PokemonCardSerieEntity>)
+    /**
+     * Inserts a list of series into the database.
+     *
+     * Existing entries with matching primary keys will be replaced.
+     *
+     * @param series - A list of series entities to insert.
+     *
+     * Could be implemented in the future, for now we will insert one serie at a time.
+     */
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun insertAllSeries(series: List<PokemonCardSerieEntity>)
 
-    // READ
-    @Query("SELECT * FROM pokemonCardSeries")
+    /**
+     * Retrieves all stored series from the database.
+     *
+     * @return A list containing every series entity in the `pokemonCardSeries` table.
+     */
+    @Query("SELECT * FROM pokemonCardSerie")
     suspend fun getAllSeries(): List<PokemonCardSerieEntity>
 
-    @Query("SELECT * FROM pokemonCardSeries WHERE id = :serieId")
+    /**
+     * Retrieves a single series entity by its unique ID.
+     *
+     * @param serieId - The ID of the series to fetch.
+     * @return The matching series entity, or `null` if none exists.
+     */
+    @Query("SELECT * FROM pokemonCardSerie WHERE id = :serieId")
     suspend fun getSerieById(serieId: String): PokemonCardSerieEntity?
 
-    // UPDATE
+    /**
+     * Updates an existing series entry in the database.
+     *
+     * The series must already exist; Room matches it using its primary key.
+     *
+     * @param serie - The updated series entity.
+     */
     @Update
     suspend fun updateSerie(serie: PokemonCardSerieEntity)
 
-    // DELETE
+    /**
+     * Deletes a specific serie from the database.
+     *
+     * Room matches the row to delete using the entity’s primary key.
+     *
+     * @param serie - The series entity to remove.
+     */
     @Delete
     suspend fun deleteSerie(serie: PokemonCardSerieEntity)
 
-    @Query("DELETE FROM pokemonCardSeries WHERE id = :serieId")
+    /**
+     * Deletes a single series entry by its ID.
+     *
+     * @param serieId - The ID of the series to delete.
+     */
+    @Query("DELETE FROM pokemonCardSerie WHERE id = :serieId")
     suspend fun deleteSerieById(serieId: String)
 
-    @Query("DELETE FROM pokemonCardSeries")
+    /**
+     * Deletes all series entries from the database.
+     */
+    @Query("DELETE FROM pokemonCardSerie")
     suspend fun deleteAllSeries()
 }

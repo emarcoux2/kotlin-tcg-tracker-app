@@ -28,6 +28,10 @@ import net.tcgdex.sdk.Extension
 
 /**
  * Displays all Pokemon card sets by the selected series.
+ *  @param navController - The object responsible for navigation between composable screens.
+ *  @param viewModel - The PokemonCardSetsViewModel providing the state and actions
+ *  for this screen.
+ *  @param cardSeriesId - The ID of the card series whose sets should be displayed. Can be null.
  */
 @Composable
 fun PokemonCardSetsBySeriesScreen(

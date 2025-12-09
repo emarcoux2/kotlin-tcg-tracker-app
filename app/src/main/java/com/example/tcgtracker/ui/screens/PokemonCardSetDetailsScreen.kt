@@ -39,9 +39,12 @@ import net.tcgdex.sdk.Extension
 import net.tcgdex.sdk.Quality
 
 /**
- * Displays the details of an individual Pokemon card set.
+ * Displays details for a specific card set.
  *
- * @param navController - The object responsible for navigation between composable screens.
+ * @param navController - The NavController used for navigation between screens.
+ * @param setId - The ID of the card set to display.
+ * @param setsViewModel - The CardSetsViewModel providing state and actions for sets.
+ * @param cardsViewModel - The CardsViewModel providing state and actions for individual cards.
  */
 @Composable
 fun PokemonCardSetDetailsScreen(

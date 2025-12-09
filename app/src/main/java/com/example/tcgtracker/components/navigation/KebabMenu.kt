@@ -29,8 +29,10 @@ import com.example.tcgtracker.destinations.Destination
  *
  * Opens and displays a dropdown menu of additional options for the user.
  *
- * @param navController - The object responsible for navigation between composable screens.
- * @param onShowMessage - Displays a Snackbar message when certain menu options are clicked.
+ * @param navController - NavController - The object responsible for navigation
+ * between composable screens.
+ * @param onShowMessage - String that displays a Snackbar message when certain
+ * menu options are clicked.
  */
 @Composable
 fun KebabMenu(
