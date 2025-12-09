@@ -41,7 +41,7 @@ fun MainBottomNavBar(navController: NavController) {
     val items = listOf(
         BottomNavItem(Destination.AllPokemonCards, ic_all_cards),
         BottomNavItem(Destination.ScanCards, ic_scan),
-        BottomNavItem(Destination.PokemonCardSeries, ic_all_card_series)
+        BottomNavItem(Destination.AllPokemonCardSeries, ic_all_card_series)
     )
 
     NavigationBar {
@@ -72,15 +72,17 @@ fun PokemonCardSetsBottomNavBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route
 
-    val ic_all_card_sets = painterResource(id = R.drawable.ic_all_card_sets)
-    val ic_scan = painterResource(id = R.drawable.ic_scan)
     val ic_all_cards = painterResource(id = R.drawable.ic_all_cards)
+    val ic_scan = painterResource(id = R.drawable.ic_scan)
+    val ic_all_card_series = painterResource(id = R.drawable.ic_all_card_series)
+    val ic_all_card_sets = painterResource(id = R.drawable.ic_all_card_sets)
 
     NavigationBar {
         listOf(
-            Destination.AllPokemonCardSets to ic_all_card_sets,
+            Destination.AllPokemonCards to ic_all_cards,
             Destination.ScanCards to ic_scan,
-            Destination.AllPokemonCards to ic_all_cards
+            Destination.AllPokemonCardSeries to ic_all_card_series,
+            Destination.AllPokemonCardSets to ic_all_card_sets
         ).forEach { (destination, iconPainter) ->
             NavigationBarItem(
                 selected = currentDestination == destination.route,
