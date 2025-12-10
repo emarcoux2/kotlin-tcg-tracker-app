@@ -9,15 +9,15 @@ import androidx.room.PrimaryKey
  * @property id - The unique identifier of the card.
  * @property name - The name of the card.
  * @property setId - The ID of the set this card belongs to.
- * @property serieId - The ID of the series this card belongs to.
+ * @property rarity - The rarity of the card.
  * @property imageUrl - The URL of the card's image.
  */
 @Entity(tableName = "pokemonCards")
 data class PokemonCardEntity(
     @PrimaryKey val id: String?,
-    val name: String?,
-    val setId: String?,
-    val serieId: String?,
-    val imageUrl: String?,
+    var name: String?,
+    var setId: String?,
+    var rarity: String?,
+    var imageUrl: String?,
     var isFavourite: Boolean = false
 )
