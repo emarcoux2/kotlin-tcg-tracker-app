@@ -30,20 +30,6 @@ interface PokemonCardDao {
     suspend fun insertCard(card: PokemonCardEntity)
 
     /**
-     * Inserts multiple new cards into the database.
-     *
-     * If the cards already exist, the existing records will be replaced
-     * with the new data.
-     *
-     * @param cards - Inserts a list of card entities
-     *
-     * Could be implemented in the future, for now we'll insert one card at a time.
-     */
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertAllCards(cards: List<PokemonCardEntity>)
-
-    // READ
-    /**
      * Retrieves all cards stored in the database.
      *
      * Returns a full list of every PokemonCardEntity currently saved
@@ -68,10 +54,13 @@ interface PokemonCardDao {
     suspend fun getCardById(cardId: String): PokemonCardEntity?
 
     /**
-     * Updates an existing card in the database.
+     * Updates the Favourite state of a specific card.
      *
-     * Room matches the provided entity by its primary key (id)
-     * and updates any changed fields in the corresponding row.
+     * This only modifies the isFavourite field of the card with the
+     * matching primary key. Room will update this record while leaving
+     * the other fields unchanged.
+     *
+     * This is triggered when a logged-in user toggles the Favourite button.
      *
      * @param card - The updated card entity to save to the database.
      */

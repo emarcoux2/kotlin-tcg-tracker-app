@@ -21,17 +21,6 @@ interface PokemonCardSetDao {
     suspend fun insertSet(card: PokemonCardSetEntity)
 
     /**
-     * Inserts a list of card sets into the database.
-     * Existing sets with the same IDs will be replaced.
-     *
-     * @param sets - The list of PokemonCardSetEntity objects to insert.
-     *
-     * Could be implemented in the future, for now we'll insert one set at a time.
-     */
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertAllSets(cards: List<PokemonCardSetEntity>)
-
-    /**
      * Retrieves all card sets from the database.
      *
      * @return A list of all PokemonCardSetEntity objects stored in the database.

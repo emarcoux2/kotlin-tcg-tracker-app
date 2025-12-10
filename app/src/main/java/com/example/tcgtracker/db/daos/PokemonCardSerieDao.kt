@@ -21,18 +21,6 @@ interface PokemonCardSerieDao {
     suspend fun insertSerie(serie: PokemonCardSerieEntity)
 
     /**
-     * Inserts a list of series into the database.
-     *
-     * Existing entries with matching primary keys will be replaced.
-     *
-     * @param series - A list of series entities to insert.
-     *
-     * Could be implemented in the future, for now we will insert one serie at a time.
-     */
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertAllSeries(series: List<PokemonCardSerieEntity>)
-
-    /**
      * Retrieves all stored series from the database.
      *
      * @return A list containing every series entity in the `pokemonCardSeries` table.

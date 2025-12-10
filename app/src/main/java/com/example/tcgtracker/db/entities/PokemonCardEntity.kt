@@ -18,5 +18,6 @@ data class PokemonCardEntity(
     val name: String?,
     val setId: String?,
     val serieId: String?,
-    val imageUrl: String?
+    val imageUrl: String?,
+    var isFavourite: Boolean = false
 )
