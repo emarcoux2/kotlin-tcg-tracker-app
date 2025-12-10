@@ -1,4 +1,4 @@
-package com.example.tcgtracker.api
+package com.example.tcgtracker.db
 //
 //import com.example.tcgtracker.db.daos.PokemonCardDao
 //import com.example.tcgtracker.db.daos.PokemonCardSerieDao
