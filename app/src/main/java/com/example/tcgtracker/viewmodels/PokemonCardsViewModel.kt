@@ -9,7 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import net.tcgdex.sdk.Extension
+import net.tcgdex.sdk.Quality
 import net.tcgdex.sdk.models.CardResume
 
 /**
@@ -22,8 +25,9 @@ import net.tcgdex.sdk.models.CardResume
 class PokemonCardsViewModel(
     private val repository: PokemonCardRepository
 ) : ViewModel() {
-    private var _allPokemonCardPreviews = MutableStateFlow<List<CardResume>>(emptyList())
-    var allPokemonCardPreviews= _allPokemonCardPreviews.asStateFlow()
+
+    private val _allPokemonCardPreviews = MutableStateFlow<List<CardResume>>(emptyList())
+    val allPokemonCardPreviews: StateFlow<List<CardResume>> = _allPokemonCardPreviews
 
     private val _loadedApiCards = MutableStateFlow<Map<String, ApiPokemonCardEntity>>(emptyMap())
     val loadedApiCards: StateFlow<Map<String, ApiPokemonCardEntity>> = _loadedApiCards
@@ -38,16 +42,16 @@ class PokemonCardsViewModel(
     val error: StateFlow<String?> = _error
 
     init {
-        loadPokemonCardPreviews()
-        loadUserPokemonCardsCollection()
+        loadCardPreviews()
+        loadUserCardsCollection()
     }
 
-    fun loadPokemonCardPreviews() {
+    fun loadCardPreviews() {
         viewModelScope.launch(Dispatchers.IO) {
             _loading.value = true
             try {
-                val cardPreviews = repository.fetchAllCards()
-                _allPokemonCardPreviews.value = cardPreviews.toList()
+                val previews = repository.fetchAllCards()
+                _allPokemonCardPreviews.value = previews.toList()
                 _error.value = null
             } catch (e: Exception) {
                 _error.value = e.message
@@ -63,18 +67,18 @@ class PokemonCardsViewModel(
                 try {
                     val card = repository.loadApiCard(cardId)
                     card?.let {
-                        _loadedApiCards.value = _loadedApiCards.value + (cardId to it)
+                        _loadedApiCards.update { old -> old + (cardId to it) }
                     }
                 } catch (_: Exception) { }
             }
         }
     }
 
-    fun loadUserPokemonCardsCollection() {
+    fun loadUserCardsCollection() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val userPokemonCardsList = repository.getUserPokemonCardsCollection()
-                _userPokemonCards.value = userPokemonCardsList.associateBy { it.cardId }
+                val userCardsList = repository.getUserPokemonCardsCollection()
+                _userPokemonCards.value = userCardsList.associateBy { it.cardId }
             } catch (_: Exception) { }
         }
     }
@@ -82,7 +86,17 @@ class PokemonCardsViewModel(
     fun addToUserCardsCollection(cardId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addCardToUserCollection(cardId)
-            loadUserPokemonCardsCollection()
+            loadUserCardsCollection()
         }
+    }
+
+    fun getCardImageUrl(cardId: String, preview: CardResume): String {
+        loadedApiCards.value[cardId]?.imageUrl?.let {
+            if (it.isNotBlank()) return it
+        }
+
+        return preview.image?.let {
+            preview.getImageUrl(Quality.HIGH, Extension.PNG)
+        } ?: ""
     }
 }

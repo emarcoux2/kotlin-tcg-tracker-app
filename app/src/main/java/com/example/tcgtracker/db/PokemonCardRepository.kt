@@ -6,6 +6,7 @@ import com.example.tcgtracker.db.daos.UserPokemonCardDao
 import com.example.tcgtracker.db.entities.ApiPokemonCardEntity
 import com.example.tcgtracker.db.entities.UserPokemonCardEntity
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import net.tcgdex.sdk.Extension
 import net.tcgdex.sdk.Quality
 import net.tcgdex.sdk.models.CardResume
@@ -77,5 +78,40 @@ class PokemonCardRepository(
 
     suspend fun insertCard(card: UserPokemonCardEntity) {
         userPokemonCardDao.insertUserCard(card)
+    }
+
+    suspend fun addPokemonCardsToUserCollection(cardIds: List<String>) {
+        if (cardIds.isEmpty()) return
+
+        val userCards = mutableListOf<UserPokemonCardEntity>()
+
+        // Load (and cache) each via API if not in DB
+        for (id in cardIds) {
+            val apiCard = loadApiCard(id)
+                ?: throw IllegalStateException("Card $id not found in API")
+
+            userCards += UserPokemonCardEntity(
+                cardId = id,
+                name = apiCard.name,
+                isFavourite = false,
+                isOwnedByUser = true
+            )
+        }
+
+        // ROOM: Insert many at once
+        userPokemonCardDao.insertUserCards(userCards)
+
+        // FIRESTORE: Batch insert
+        val batch = firestore.batch()
+        val col = firestore.collection("users")
+            .document(userId)
+            .collection("collection")
+
+        userCards.forEach { card ->
+            val doc = col.document(card.cardId)
+            batch.set(doc, card)
+        }
+
+        batch.commit().await()
     }
 }

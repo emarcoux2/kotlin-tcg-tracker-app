@@ -36,3 +36,15 @@ class PokemonCardSeriesViewModelFactory(
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+
+class AddPokemonCardToCollectionViewModelFactory(
+    private val repository: PokemonCardRepository
+) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AddPokemonCardToCollectionViewModel::class.java)) {
+            return AddPokemonCardToCollectionViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}

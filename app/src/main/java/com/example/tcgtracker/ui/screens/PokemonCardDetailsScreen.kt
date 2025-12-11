@@ -26,13 +26,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.tcgtracker.viewmodels.PokemonCardsViewModel
-import net.tcgdex.sdk.Extension
-import net.tcgdex.sdk.Quality
+import com.example.tcgtracker.R
+import com.example.tcgtracker.db.PokemonCardRepository
+import com.example.tcgtracker.viewmodels.PokemonCardsViewModelFactory
 
 /**
  * Displays the details of an individual Pokemon card.
@@ -46,8 +48,13 @@ import net.tcgdex.sdk.Quality
 fun PokemonCardDetailsScreen(
     navController: NavController,
     cardId: String,
-    viewModel: PokemonCardsViewModel = viewModel()
+    viewModel: PokemonCardsViewModel = viewModel(),
+    repository: PokemonCardRepository
 ) {
+    val viewModel: PokemonCardsViewModel = viewModel(
+        factory = PokemonCardsViewModelFactory(repository)
+    )
+
     val apiCardMap by viewModel.loadedApiCards.collectAsState()
     val userPokemonCardMap by viewModel.userPokemonCards.collectAsState()
     val loading by viewModel.loading.collectAsState()
@@ -91,10 +98,10 @@ fun PokemonCardDetailsScreen(
             apiCard.imageUrl?.let { imageUrl ->
                 AsyncImage(
                     model = imageUrl,
-                    contentDescription = apiCard.name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(0.7f)
+                    placeholder = painterResource(R.drawable.ic_card_details),
+                    error = painterResource(R.drawable.ic_card_details),
+                    contentDescription = apiCard.name ?: "Unknown Card",
+                    modifier = Modifier.fillMaxWidth().aspectRatio(0.7f)
                 )
             }
 
@@ -127,17 +134,21 @@ fun PokemonCardDetailsScreen(
                         modifier = Modifier.padding(bottom = 2.dp)
                     )
 
-                    AsyncImage(
-                        model = logoUrl,
-                        contentDescription = apiCard.setName,
-                        modifier = Modifier
-                            .size(250.dp)
-                            .clickable {
-                                apiCard.setId?.let { setId ->
-                                    navController.navigate("cardSetDetailsScreen/$setId")
+                    apiCard?.setLogo?.let { logoUrl ->
+                        AsyncImage(
+                            model = logoUrl,
+                            placeholder = painterResource(R.drawable.ic_all_card_sets),
+                            error = painterResource(R.drawable.ic_all_card_sets),
+                            contentDescription = apiCard.setName ?: "Unknown Set",
+                            modifier = Modifier
+                                .size(250.dp)
+                                .clickable {
+                                    apiCard.setId?.let { setId ->
+                                        navController.navigate("pokemonCardSetDetailsScreen/$setId")
+                                    }
                                 }
-                            }
-                    )
+                        )
+                    }
 
                     Text(
                         text = apiCard.setName ?: "",
@@ -146,7 +157,7 @@ fun PokemonCardDetailsScreen(
                             .padding(top = 6.dp)
                             .clickable {
                                 apiCard.setId?.let { setId ->
-                                    navController.navigate("cardSetDetailsScreen/$setId")
+                                    navController.navigate("pokemonCardSetDetailsScreen/$setId")
                                 }
                             }
                     )
@@ -162,7 +173,7 @@ fun PokemonCardDetailsScreen(
                 }
             } else {
                 Text(
-                    text = "You own this card",
+                    text = "You already own this card!",
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
