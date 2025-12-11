@@ -22,10 +22,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.tcgtracker.api.PokemonTCGdexService
 import com.example.tcgtracker.components.navigation.AccountBottomNavBar
 import com.example.tcgtracker.components.navigation.KebabMenu
 import com.example.tcgtracker.components.navigation.MainBottomNavBar
 import com.example.tcgtracker.components.navigation.PokemonCardSetsBottomNavBar
+import com.example.tcgtracker.db.AppDatabase
+import com.example.tcgtracker.db.PokemonCardRepository
 import com.example.tcgtracker.ui.screens.AccountScreen
 import com.example.tcgtracker.ui.screens.AllPokemonCardSeriesScreen
 import com.example.tcgtracker.ui.screens.AllPokemonCardsScreen
@@ -49,6 +52,9 @@ import kotlinx.coroutines.launch
  * the All Pokemon Cards screen, while logged-in users begin on the Sign In screen.
  */
 class MainActivity : ComponentActivity() {
+
+    private lateinit var repository: PokemonCardRepository
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +67,28 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination?.route
 
-                val fs_db = Firebase.firestore
-                val auth = FirebaseAuth.getInstance()
-                val currentUser = auth.currentUser
+                // firestore db initialization
+                val firestoreDb = Firebase.firestore
+                val firestoreAuth = FirebaseAuth.getInstance()
+                val currentUser = firestoreAuth.currentUser?.uid ?: "testUser"
 
-                val startDestination = if (currentUser == null) "signInScreen" else "allPokemonCardsScreen"
+                // local db (Room) initialization
+                val localDb = AppDatabase.getInstance(applicationContext)
+                val apiPokemonCardDao = localDb.apiPokemonCardDao()
+                val userPokemonCardDao = localDb.userPokemonCardDao()
+
+                repository = PokemonCardRepository(
+                    apiPokemonCardDao = apiPokemonCardDao,
+                    userPokemonCardDao = userPokemonCardDao,
+                    apiService = PokemonTCGdexService(),
+                    firestore = firestoreDb,
+                    userId = currentUser
+                )
+
+                val startDestination = if (currentUser != null)
+                    "allPokemonCardsScreen"
+                else
+                    "signInScreen"
 
                 val showMainBottomNavBar = when (currentDestination) {
                     "allPokemonCardsScreen",
@@ -124,12 +147,27 @@ class MainActivity : ComponentActivity() {
                         startDestination = startDestination,
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable("signInScreen") { SignInScreen(context = LocalContext.current) }
+                        composable("signInScreen") {
+                            SignInScreen(
+                                onSignInSuccess = {
+                                    navController.navigate("allPokemonCardsScreen") {
+                                        popUpTo("signInScreen") { inclusive = true }
+                                    }
+                                }
+                            )
+                        }
+
+                        // account screens
                         composable("accountScreen") { AccountScreen() }
                         composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
                         composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
 //                        composable("scanCardsScreen") { ScanCardsScreen(navController) }
-                        composable("allPokemonCardsScreen") { AllPokemonCardsScreen(navController) }
+
+                        composable("allPokemonCardsScreen") {
+                            AllPokemonCardsScreen(
+                                navController = navController,
+                                repository = repository
+                            ) }
                         composable("pokemonCardDetailsScreen/{cardId}") { backStackEntry ->
                             val cardId = backStackEntry.arguments?.getString("cardId") ?: return@composable
                             PokemonCardDetailsScreen(navController = navController, cardId = cardId)

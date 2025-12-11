@@ -14,13 +14,12 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "apiPokemonCards")
 data class ApiPokemonCardEntity(
-    @PrimaryKey val id: String?,
+    @PrimaryKey val id: String,
     val name: String?,
     val setId: String?,
     val setName: String?,
     val setLogo: String?,
     val rarity: String?,
-    val types: List<String>?,
     val description: String?,
     val imageUrl: String?,
     var isFavourite: Boolean

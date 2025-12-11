@@ -54,7 +54,7 @@ fun PokemonCardSetDetailsScreen(
     cardsViewModel: PokemonCardsViewModel = viewModel()
 ) {
     val loadedCardSets by setsViewModel.loadedCardSets.collectAsState()
-    val loadedCards by cardsViewModel.loadedCards.collectAsState()
+    val loadedCards by cardsViewModel.loadedApiCards.collectAsState()
     val loading by setsViewModel.loading.collectAsState()
     val error by setsViewModel.error.collectAsState()
 
@@ -141,17 +141,19 @@ fun PokemonCardSetDetailsScreen(
                     ) {
                         if (fullCard != null) {
                             AsyncImage(
-                                model = fullCard.getImageUrl(Quality.HIGH, Extension.JPG),
+                                model = fullCard.imageUrl,
                                 contentDescription = fullCard.name,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .aspectRatio(0.7f)
                             )
-                            Text(
-                                text = fullCard.name,
-                                modifier = Modifier.padding(top = 4.dp),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                            fullCard.name?.let {
+                                Text(
+                                    text = it,
+                                    modifier = Modifier.padding(top = 4.dp),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
                         } else {
                             Box(
                                 modifier = Modifier

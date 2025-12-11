@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "pokemonCardSerie")
 data class PokemonCardSerieEntity(
-    @PrimaryKey val id: String?,
+    @PrimaryKey val id: String,
     val name: String?,
     val setId: String?,
     val serieId: String?,

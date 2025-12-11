@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -47,19 +48,21 @@ fun PokemonCardDetailsScreen(
     cardId: String,
     viewModel: PokemonCardsViewModel = viewModel()
 ) {
-    val pokemonCardMap by viewModel.loadedCards.collectAsState()
+    val apiCardMap by viewModel.loadedApiCards.collectAsState()
+    val userPokemonCardMap by viewModel.userPokemonCards.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
 
     LaunchedEffect(cardId) {
-        if (!pokemonCardMap.containsKey(cardId)) {
+        if (!userPokemonCardMap.containsKey(cardId)) {
             viewModel.fetchFullCard(cardId)
         }
     }
 
-    val card = pokemonCardMap[cardId]
+    val apiCard = apiCardMap[cardId]
+    val userPokemonCard = userPokemonCardMap[cardId]
 
-    if (loading || card == null) {
+    if (loading || apiCard == null) {
         Box(
             Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -76,9 +79,7 @@ fun PokemonCardDetailsScreen(
         return
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -86,25 +87,34 @@ fun PokemonCardDetailsScreen(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AsyncImage(
-                model = card.getImageUrl(Quality.HIGH, Extension.JPG),
-                contentDescription = card.name,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(0.7f)
-            )
+            // Card Image
+            apiCard.imageUrl?.let { imageUrl ->
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = apiCard.name,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(0.7f)
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Card Name: ${card.name}", style = MaterialTheme.typography.titleMedium)
-            Text(text = "Card Type: ${card.types?.joinToString()}", style = MaterialTheme.typography.bodyMedium)
+            // Card Info
             Text(
-                text = card.description ?: "No description available",
+                text = "Card Name: ${apiCard.name ?: "Unknown"}",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            Text(
+                text = apiCard.description ?: "No description available",
                 style = MaterialTheme.typography.bodySmall
             )
-            card.set.let { cardSet ->
-                val logoUrl = cardSet.getLogoUrl(Extension.PNG)
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Set Logo
+            apiCard.setLogo?.let { logoUrl ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -116,25 +126,45 @@ fun PokemonCardDetailsScreen(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 2.dp)
                     )
+
                     AsyncImage(
                         model = logoUrl,
-                        contentDescription = cardSet.name,
+                        contentDescription = apiCard.setName,
                         modifier = Modifier
                             .size(250.dp)
                             .clickable {
-                                navController.navigate("pokemonCardSetDetailsScreen/${cardSet.id}")
+                                apiCard.setId?.let { setId ->
+                                    navController.navigate("cardSetDetailsScreen/$setId")
+                                }
                             }
                     )
+
                     Text(
-                        text = cardSet.name,
+                        text = apiCard.setName ?: "",
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier
                             .padding(top = 6.dp)
                             .clickable {
-                                navController.navigate("pokemonCardSetDetailsScreen/${cardSet.id}")
+                                apiCard.setId?.let { setId ->
+                                    navController.navigate("cardSetDetailsScreen/$setId")
+                                }
                             }
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Add to Collection Button
+            if (userPokemonCard == null) {
+                Button(onClick = { viewModel.addToUserCardsCollection(cardId) }) {
+                    Text("Add to My Collection")
+                }
+            } else {
+                Text(
+                    text = "You own this card",
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
 

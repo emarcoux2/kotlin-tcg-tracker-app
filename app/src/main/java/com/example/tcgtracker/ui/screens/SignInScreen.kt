@@ -2,7 +2,6 @@ package com.example.tcgtracker.ui.screens
 
 import android.content.Context
 import android.content.Intent
-import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -40,13 +39,13 @@ import com.google.firebase.auth.FirebaseAuth
  */
 @Composable
 fun SignInScreen(
-    context: Context,
+    onSignInSuccess: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
@@ -80,13 +79,27 @@ fun SignInScreen(
             onClick = {
                 val trimmedEmail = email.trim()
                 if (trimmedEmail.isBlank() || password.isBlank()) {
-                    Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Please fill in all fields",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@Button
                 }
 
                 isLoading = true
                 keyboardController?.hide()
-                signInWithEmail(trimmedEmail, password, context) { isLoading = false }
+                val auth = FirebaseAuth.getInstance()
+                auth.signInWithEmailAndPassword(trimmedEmail, password)
+                    .addOnCompleteListener { task ->
+                        isLoading = false
+                        if (task.isSuccessful) onSignInSuccess()
+                        else Toast.makeText(
+                            context,
+                            "Sign In Failed: ${task.exception?.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
             },
             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
         ) {
@@ -99,13 +112,27 @@ fun SignInScreen(
             onClick = {
                 val trimmedEmail = email.trim()
                 if (trimmedEmail.isBlank() || password.isBlank()) {
-                    Toast.makeText(context, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Please fill in all fields",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     return@Button
                 }
 
                 isLoading = true
                 keyboardController?.hide()
-                createAccount(trimmedEmail, password, context) { isLoading = false }
+                val auth = FirebaseAuth.getInstance()
+                auth.createUserWithEmailAndPassword(trimmedEmail, password)
+                    .addOnCompleteListener { task ->
+                        isLoading = false
+                        if (task.isSuccessful) onSignInSuccess()
+                        else Toast.makeText(
+                            context,
+                            "Account Creation Failed: ${task.exception?.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
             },
             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
         ) {
@@ -118,7 +145,17 @@ fun SignInScreen(
             onClick = {
                 isLoading = true
                 keyboardController?.hide()
-                signInAsGuest(context) { isLoading = false }
+                val auth = FirebaseAuth.getInstance()
+                auth.signInAnonymously()
+                    .addOnCompleteListener { task ->
+                        isLoading = false
+                        if (task.isSuccessful) onSignInSuccess()
+                        else Toast.makeText(
+                            context,
+                            "Guest Sign In Failed: ${task.exception?.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
             },
             modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
         ) {
@@ -128,7 +165,7 @@ fun SignInScreen(
     }
 }
 
-// --- Firebase Functions ---
+// Firebase functions
 private fun signInWithEmail(email: String, password: String, context: Context, onComplete: () -> Unit) {
     val auth = FirebaseAuth.getInstance()
     auth.signInWithEmailAndPassword(email, password)
@@ -136,7 +173,11 @@ private fun signInWithEmail(email: String, password: String, context: Context, o
             if (task.isSuccessful) {
                 navigateToMain(context, auth.currentUser?.uid)
             } else {
-                Toast.makeText(context, "Sign In Failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Sign In Failed: ${task.exception?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             onComplete()
         }
@@ -149,7 +190,11 @@ private fun createAccount(email: String, password: String, context: Context, onC
             if (task.isSuccessful) {
                 navigateToMain(context, auth.currentUser?.uid)
             } else {
-                Toast.makeText(context, "Account Creation Failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Account Creation Failed: ${task.exception?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             onComplete()
         }
@@ -162,7 +207,11 @@ private fun signInAsGuest(context: Context, onComplete: () -> Unit) {
             if (task.isSuccessful) {
                 navigateToMain(context, auth.currentUser?.uid)
             } else {
-                Toast.makeText(context, "Guest Sign In Failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    context,
+                    "Guest Sign In Failed: ${task.exception?.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
             onComplete()
         }
