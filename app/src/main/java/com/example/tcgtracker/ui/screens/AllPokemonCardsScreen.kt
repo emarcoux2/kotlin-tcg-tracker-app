@@ -24,7 +24,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.tcgtracker.db.PokemonCardRepository
 import com.example.tcgtracker.viewmodels.PokemonCardsViewModel
+import com.example.tcgtracker.viewmodels.PokemonCardsViewModelFactory
 import net.tcgdex.sdk.Extension
 import net.tcgdex.sdk.Quality
 
@@ -37,11 +40,15 @@ import net.tcgdex.sdk.Quality
  */
 @Composable
 fun AllPokemonCardsScreen(
-    navController: NavController,
-    viewModel: PokemonCardsViewModel = viewModel()
+    repository: PokemonCardRepository,
+    navController: NavHostController
 ) {
+    val viewModel: PokemonCardsViewModel = viewModel(
+        factory = PokemonCardsViewModelFactory(repository)
+    )
+
     val pokemonCards by viewModel.allPokemonCardPreviews.collectAsState()
-    val fullCards by viewModel.loadedCards.collectAsState()
+    val fullCards by viewModel.loadedApiCards.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
 
@@ -73,7 +80,7 @@ fun AllPokemonCardsScreen(
             }
 
             val fullCard = fullCards[cardResume.id]
-            val imageUrl = fullCard?.getImageUrl(Quality.HIGH, Extension.WEBP) ?: ""
+            val imageUrl = fullCard?.imageUrl ?: ""
 
             Column(
                 modifier = Modifier
@@ -88,12 +95,10 @@ fun AllPokemonCardsScreen(
                         .fillMaxWidth()
                         .aspectRatio(0.7f)
                 )
-                cardResume.name?.let {
-                    Text(
-                        text = it,
-                        modifier = Modifier.padding(top = 4.dp),
-                    )
-                }
+                Text(
+                    text = cardResume.name,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
             }
         }
     }
