@@ -36,12 +36,12 @@ fun AccountBottomNavBar(navController: NavController) {
     val currentDestination = navBackStackEntry?.destination?.route
 
     val ic_favourite = painterResource(id = R.drawable.ic_favourite)
-    val ic_scan = painterResource(id = R.drawable.ic_scan)
+    val ic_add_card = painterResource(id = R.drawable.ic_add_card)
     val ic_my_cards = painterResource(id = R.drawable.ic_my_cards)
 
     val items = listOf(
         AccountNavItem(Destination.FavouritePokemonCards, ic_favourite),
-        AccountNavItem(Destination.ScanCards, ic_scan),
+        AccountNavItem(Destination.AddPokemonCardsToCollectionScreen, ic_add_card),
         AccountNavItem(Destination.MyPokemonCards, ic_my_cards)
     )
 

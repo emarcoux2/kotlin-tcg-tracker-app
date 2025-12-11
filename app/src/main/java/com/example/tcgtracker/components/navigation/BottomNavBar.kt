@@ -35,12 +35,12 @@ fun MainBottomNavBar(navController: NavController) {
     val currentDestination = navBackStackEntry?.destination?.route
 
     val ic_all_cards = painterResource(id = R.drawable.ic_all_cards)
-    val ic_scan = painterResource(id = R.drawable.ic_scan)
+    val ic_add_card = painterResource(id = R.drawable.ic_add_card)
     val ic_all_card_series = painterResource(id = R.drawable.ic_all_card_series)
 
     val items = listOf(
         BottomNavItem(Destination.AllPokemonCards, ic_all_cards),
-        BottomNavItem(Destination.ScanCards, ic_scan),
+        BottomNavItem(Destination.AddPokemonCardsToCollectionScreen, ic_add_card),
         BottomNavItem(Destination.AllPokemonCardSeries, ic_all_card_series)
     )
 
@@ -73,14 +73,14 @@ fun PokemonCardSetsBottomNavBar(navController: NavController) {
     val currentDestination = navBackStackEntry?.destination?.route
 
     val ic_all_cards = painterResource(id = R.drawable.ic_all_cards)
-    val ic_scan = painterResource(id = R.drawable.ic_scan)
+    val ic_add_card = painterResource(id = R.drawable.ic_add_card)
     val ic_all_card_series = painterResource(id = R.drawable.ic_all_card_series)
     val ic_all_card_sets = painterResource(id = R.drawable.ic_all_card_sets)
 
     NavigationBar {
         listOf(
             Destination.AllPokemonCards to ic_all_cards,
-            Destination.ScanCards to ic_scan,
+            Destination.AddPokemonCardsToCollectionScreen to ic_add_card,
             Destination.AllPokemonCardSeries to ic_all_card_series,
             Destination.AllPokemonCardSets to ic_all_card_sets
         ).forEach { (destination, iconPainter) ->
@@ -237,13 +237,13 @@ fun PokemonCardSetsBottomNavBar(navController: NavController) {
 //    val currentDestination = navBackStackEntry?.destination?.route
 //
 //    val ic_account = painterResource(id = R.drawable.ic_account)
-//    val ic_scan = painterResource(id = R.drawable.ic_scan)
+//    val ic_add_card = painterResource(id = R.drawable.ic_add_card)
 //    val ic_my_cards = painterResource(id = R.drawable.ic_my_cards)
 //
 //    NavigationBar {
 //        listOf(
 //            Destination.Account to ic_account,
-//            Destination.ScanCards to ic_scan,
+//            Destination.AddPokemonCardsToCollectionScreen to ic_add_card,
 //            Destination.MyPokemonCards to ic_my_cards
 //        ).forEach { (destination, iconPainter) ->
 //            NavigationBarItem(
