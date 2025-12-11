@@ -24,6 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -34,7 +37,9 @@ import coil.compose.AsyncImage
 import com.example.tcgtracker.viewmodels.PokemonCardsViewModel
 import com.example.tcgtracker.R
 import com.example.tcgtracker.db.PokemonCardRepository
-import com.example.tcgtracker.viewmodels.PokemonCardsViewModelFactory
+import com.example.tcgtracker.viewmodels.PokemonCardSetsViewModelFactory
+import net.tcgdex.sdk.Extension
+import net.tcgdex.sdk.Quality
 
 /**
  * Displays the details of an individual Pokemon card.
@@ -48,32 +53,43 @@ import com.example.tcgtracker.viewmodels.PokemonCardsViewModelFactory
 fun PokemonCardDetailsScreen(
     navController: NavController,
     cardId: String,
-    viewModel: PokemonCardsViewModel = viewModel(),
     repository: PokemonCardRepository
 ) {
     val viewModel: PokemonCardsViewModel = viewModel(
-        factory = PokemonCardsViewModelFactory(repository)
+        factory = PokemonCardSetsViewModelFactory(repository)
     )
 
     val apiCardMap by viewModel.loadedApiCards.collectAsState()
+    val allCardPreviews by viewModel.allPokemonCardPreviews.collectAsState()
     val userPokemonCardMap by viewModel.userPokemonCards.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    LaunchedEffect(cardId) {
-        if (!userPokemonCardMap.containsKey(cardId)) {
-            viewModel.fetchFullCard(cardId)
-        }
-    }
-
+    var imageUrl by remember { mutableStateOf("") }
+    var cardName by remember { mutableStateOf("Unknown Card") }
     val apiCard = apiCardMap[cardId]
     val userPokemonCard = userPokemonCardMap[cardId]
 
-    if (loading || apiCard == null) {
-        Box(
-            Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
+    LaunchedEffect(cardId) {
+        viewModel.fetchFullCard(cardId)
+    }
+
+    // Update image URL and card name
+    LaunchedEffect(apiCardMap[cardId], allCardPreviews) {
+        val fullCard = apiCardMap[cardId]
+        val previewCard = allCardPreviews.find { it.id == cardId }
+
+        imageUrl = when {
+            fullCard?.imageUrl != null -> fullCard.imageUrl
+            previewCard?.image != null -> previewCard.getImageUrl(Quality.HIGH, Extension.PNG)
+            else -> ""
+        }
+
+        cardName = fullCard?.name ?: previewCard?.name ?: "Unknown Card"
+    }
+
+    if (loading && imageUrl.isEmpty()) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
         return
@@ -86,6 +102,8 @@ fun PokemonCardDetailsScreen(
         return
     }
 
+    val userCard = userPokemonCardMap[cardId]
+
     Box(Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -95,7 +113,7 @@ fun PokemonCardDetailsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Card Image
-            apiCard.imageUrl?.let { imageUrl ->
+            apiCard?.imageUrl?.let { imageUrl ->
                 AsyncImage(
                     model = imageUrl,
                     placeholder = painterResource(R.drawable.ic_card_details),
@@ -109,19 +127,19 @@ fun PokemonCardDetailsScreen(
 
             // Card Info
             Text(
-                text = "Card Name: ${apiCard.name ?: "Unknown"}",
+                text = "Card Name: ${apiCard?.name ?: "Unknown"}",
                 style = MaterialTheme.typography.titleMedium
             )
 
             Text(
-                text = apiCard.description ?: "No description available",
+                text = apiCard?.description ?: "No description available",
                 style = MaterialTheme.typography.bodySmall
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Set Logo
-            apiCard.setLogo?.let { logoUrl ->
+            apiCard?.setLogo?.let { logoUrl ->
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -134,7 +152,7 @@ fun PokemonCardDetailsScreen(
                         modifier = Modifier.padding(bottom = 2.dp)
                     )
 
-                    apiCard?.setLogo?.let { logoUrl ->
+                    apiCard.setLogo.let { logoUrl ->
                         AsyncImage(
                             model = logoUrl,
                             placeholder = painterResource(R.drawable.ic_all_card_sets),

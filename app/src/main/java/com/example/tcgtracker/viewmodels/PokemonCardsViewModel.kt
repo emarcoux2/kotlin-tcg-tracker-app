@@ -2,13 +2,13 @@ package com.example.tcgtracker.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tcgtracker.db.PokemonCardRepository
 import com.example.tcgtracker.db.entities.ApiPokemonCardEntity
 import com.example.tcgtracker.db.entities.UserPokemonCardEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.tcgdex.sdk.Extension
@@ -46,6 +46,9 @@ class PokemonCardsViewModel(
         loadUserCardsCollection()
     }
 
+    /**
+     *
+     */
     fun loadCardPreviews() {
         viewModelScope.launch(Dispatchers.IO) {
             _loading.value = true
@@ -61,6 +64,9 @@ class PokemonCardsViewModel(
         }
     }
 
+    /**
+     *
+     */
     fun fetchFullCard(cardId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!_loadedApiCards.value.containsKey(cardId)) {
@@ -74,6 +80,9 @@ class PokemonCardsViewModel(
         }
     }
 
+    /**
+     *
+     */
     fun loadUserCardsCollection() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -83,6 +92,9 @@ class PokemonCardsViewModel(
         }
     }
 
+    /**
+     *
+     */
     fun addToUserCardsCollection(cardId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addCardToUserCollection(cardId)
@@ -90,6 +102,9 @@ class PokemonCardsViewModel(
         }
     }
 
+    /**
+     *
+     */
     fun getCardImageUrl(cardId: String, preview: CardResume): String {
         loadedApiCards.value[cardId]?.imageUrl?.let {
             if (it.isNotBlank()) return it

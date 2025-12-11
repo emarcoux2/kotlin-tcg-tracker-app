@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.tcgdex.sdk.models.CardResume
 
+/**
+ *
+ */
 class AddPokemonCardToCollectionViewModel(
     private val repository: PokemonCardRepository
 ) : ViewModel() {
@@ -26,6 +29,9 @@ class AddPokemonCardToCollectionViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error = _error.asStateFlow()
 
+    /**
+     *
+     */
     fun search(query: String) {
         if (query.isBlank()) {
             _searchResults.value = emptyList()
@@ -48,12 +54,18 @@ class AddPokemonCardToCollectionViewModel(
         }
     }
 
+    /**
+     *
+     */
     fun toggleSelected(id: String) {
         _selected.update { current ->
             if (id in current) current - id else current + id
         }
     }
 
+    /**
+     *
+     */
     fun addSelected() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

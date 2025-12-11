@@ -33,10 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.tcgtracker.db.PokemonCardRepository
 import com.example.tcgtracker.viewmodels.PokemonCardSetsViewModel
+import com.example.tcgtracker.viewmodels.PokemonCardSetsViewModelFactory
 import com.example.tcgtracker.viewmodels.PokemonCardsViewModel
 import net.tcgdex.sdk.Extension
-import net.tcgdex.sdk.Quality
 
 /**
  * Displays details for a specific card set.
@@ -50,9 +51,15 @@ import net.tcgdex.sdk.Quality
 fun PokemonCardSetDetailsScreen(
     navController: NavController,
     setId: String,
-    setsViewModel: PokemonCardSetsViewModel = viewModel(),
-    cardsViewModel: PokemonCardsViewModel = viewModel()
+    repository: PokemonCardRepository
 ) {
+    val setsViewModel: PokemonCardSetsViewModel = viewModel(
+        factory = PokemonCardSetsViewModelFactory(repository)
+    )
+    val cardsViewModel: PokemonCardsViewModel = viewModel(
+        factory = PokemonCardSetsViewModelFactory(repository)
+    )
+
     val loadedCardSets by setsViewModel.loadedCardSets.collectAsState()
     val loadedCards by cardsViewModel.loadedApiCards.collectAsState()
     val loading by setsViewModel.loading.collectAsState()
@@ -82,12 +89,8 @@ fun PokemonCardSetDetailsScreen(
 
     val cardsInSetResume = cardSet.cards
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize()) {
             AsyncImage(
                 model = cardSet.getLogoUrl(Extension.PNG),
                 contentDescription = cardSet.name,
@@ -95,6 +98,9 @@ fun PokemonCardSetDetailsScreen(
                     .fillMaxWidth(0.5f)
                     .aspectRatio(1f)
                     .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        navController.navigate("pokemonCardSetDetailsScreen/${cardSet.id}")
+                    }
             )
 
             Text(
@@ -125,6 +131,8 @@ fun PokemonCardSetDetailsScreen(
             ) {
                 items(cardsInSetResume) { cardResume ->
                     val fullCard = loadedCards[cardResume.id]
+
+                    // Fetch card if not loaded
                     LaunchedEffect(cardResume.id) {
                         if (fullCard == null) {
                             cardsViewModel.fetchFullCard(cardResume.id)
@@ -140,19 +148,21 @@ fun PokemonCardSetDetailsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         if (fullCard != null) {
-                            AsyncImage(
-                                model = fullCard.imageUrl,
-                                contentDescription = fullCard.name,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .aspectRatio(0.7f)
-                            )
-                            fullCard.name?.let {
-                                Text(
-                                    text = it,
-                                    modifier = Modifier.padding(top = 4.dp),
-                                    style = MaterialTheme.typography.bodyMedium
+                            cardSet.logo?.let { logoUrl ->
+                                AsyncImage(
+                                    model = "$logoUrl/${Extension.PNG.value}",
+                                    contentDescription = fullCard.name,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .aspectRatio(0.7f)
                                 )
+                                fullCard.name?.let {
+                                    Text(
+                                        text = it,
+                                        modifier = Modifier.padding(top = 4.dp),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
                             }
                         } else {
                             Box(

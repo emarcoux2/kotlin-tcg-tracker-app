@@ -22,13 +22,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavType
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.example.tcgtracker.api.PokemonTCGdexService
 import com.example.tcgtracker.components.navigation.AccountBottomNavBar
 import com.example.tcgtracker.components.navigation.KebabMenu
@@ -37,6 +35,7 @@ import com.example.tcgtracker.components.navigation.PokemonCardSetsBottomNavBar
 import com.example.tcgtracker.db.AppDatabase
 import com.example.tcgtracker.db.PokemonCardRepository
 import com.example.tcgtracker.ui.screens.AccountScreen
+import com.example.tcgtracker.ui.screens.AddPokemonCardsToCollectionScreen
 import com.example.tcgtracker.ui.screens.AllPokemonCardSeriesScreen
 import com.example.tcgtracker.ui.screens.AllPokemonCardsScreen
 import com.example.tcgtracker.ui.screens.FavouritePokemonCardsScreen
@@ -44,11 +43,11 @@ import com.example.tcgtracker.ui.screens.MyPokemonCardsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardDetailsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardSetDetailsScreen
 import com.example.tcgtracker.ui.screens.AllPokemonCardSetsScreen
-import com.example.tcgtracker.ui.screens.PokemonCardSeriesDetailsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardSetsBySeriesScreen
 import com.example.tcgtracker.ui.screens.SignInScreen
-//import com.example.tcgtracker.ui.screens.ScanCardsScreen
 import com.example.tcgtracker.ui.theme.TCGTrackerTheme
+import com.example.tcgtracker.viewmodels.MyPokemonCardsViewModel
+import com.example.tcgtracker.viewmodels.MyPokemonCardsViewModelFactory
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -65,7 +64,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContent {
             TCGTrackerTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
@@ -83,39 +81,39 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(Unit) {
                     firebaseUser = FirebaseAuth.getInstance().currentUser
 
-                    // Initialize repository only after we know the user
-                    val firestoreDb = Firebase.firestore
-                    val localDb = AppDatabase.getInstance(applicationContext)
-                    repository = PokemonCardRepository(
-                        apiPokemonCardDao = localDb.apiPokemonCardDao(),
-                        userPokemonCardDao = localDb.userPokemonCardDao(),
-                        apiService = PokemonTCGdexService(),
-                        firestore = firestoreDb,
-                        userId = firebaseUser?.uid ?: ""
-                    )
+                    if (firebaseUser != null) {
+                        val firestoreDb = Firebase.firestore
+                        val localDb = AppDatabase.getInstance(applicationContext)
+
+                        repository = PokemonCardRepository(
+                            apiPokemonCardDao = localDb.apiPokemonCardDao(),
+                            userPokemonCardDao = localDb.userPokemonCardDao(),
+                            apiService = PokemonTCGdexService(),
+                            firestore = firestoreDb,
+                            userId = firebaseUser!!.uid
+                        )
+                    }
 
                     isLoading = false
                 }
 
-                val showMainBottomNavBar = when (currentDestination) {
+                val showMainBottomNavBar = currentDestination in listOf(
                     "allPokemonCardsScreen",
                     "pokemonCardSeriesScreen",
                     "allPokemonCardSetsScreen",
                     "pokemonCardDetailsScreen",
                     "pokemonCardSetDetailsScreen",
-                    "addPokemonCardToCollectionScreen" -> true
-                    else -> false
-                }
+                    "addPokemonCardToCollectionScreen"
+                )
 
                 val showPokemonCardSetsBottomNavBar =
                     currentDestination?.startsWith("pokemonCardSetsBySeriesScreen") == true
 
-                val showAccountBottomNavBar = when (currentDestination) {
+                val showAccountBottomNavBar = currentDestination in listOf(
                     "accountScreen",
                     "favouritePokemonCardsScreen",
-                    "myPokemonCardsScreen" -> true
-                    else -> false
-                }
+                    "myPokemonCardsScreen"
+                )
 
                 Scaffold(
                     snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -137,73 +135,70 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         if (showMainBottomNavBar) MainBottomNavBar(navController)
                         if (showAccountBottomNavBar) AccountBottomNavBar(navController)
-                        if (showPokemonCardSetsBottomNavBar) PokemonCardSetsBottomNavBar(navController)
+                        if (showPokemonCardSetsBottomNavBar) PokemonCardSetsBottomNavBar(
+                            navController
+                        )
                     }
                 ) { innerPadding ->
-
-                    if (isLoading) {
-                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            CircularProgressIndicator()
-                        }
-                    } else {
+                    if (firebaseUser != null && repository != null) {
                         NavHost(
                             navController = navController,
-                            startDestination = if (firebaseUser != null) "allPokemonCardsScreen" else "signInScreen",
+                            startDestination = "allPokemonCardsScreen",
                             modifier = Modifier.padding(innerPadding)
                         ) {
-                            // SignIn Screen
-                            composable("signInScreen") {
-                                SignInScreen(
-                                    onSignInSuccess = {
-                                        // Update firebaseUser state so NavHost re-composes with correct startDestination
-                                        firebaseUser = FirebaseAuth.getInstance().currentUser
-                                        // Navigate safely
-                                        navController.navigate("allPokemonCardsScreen") {
-                                            popUpTo("signInScreen") { inclusive = true }
-                                        }
-                                    }
-                                )
-                            }
-
-                            // Main App Screens (always declared)
+                            // All Cards Screen
                             composable("allPokemonCardsScreen") {
-                                repository?.let {
-                                    AllPokemonCardsScreen(
-                                        navController = navController,
-                                        repository = it
-                                    )
-                                }
+                                AllPokemonCardsScreen(navController, repository!!)
                             }
 
+                            // Card Details Screen
                             composable("pokemonCardDetailsScreen/{cardId}") { backStackEntry ->
                                 val cardId = backStackEntry.arguments?.getString("cardId") ?: return@composable
-                                repository?.let {
-                                    PokemonCardDetailsScreen(
-                                        navController = navController,
-                                        cardId = cardId,
-                                        repository = it
-                                    )
-                                }
+                                PokemonCardDetailsScreen(navController, cardId, repository!!)
                             }
 
+                            // Sets & Series
                             composable("pokemonCardSeriesScreen") { AllPokemonCardSeriesScreen(navController) }
                             composable("allPokemonCardSetsScreen") { AllPokemonCardSetsScreen(navController) }
                             composable("pokemonCardSetsBySeriesScreen/{seriesId}") { backStackEntry ->
                                 val seriesId = backStackEntry.arguments?.getString("seriesId")
                                 PokemonCardSetsBySeriesScreen(navController, cardSeriesId = seriesId)
                             }
-                            composable(
-                                "pokemonCardSetDetailsScreen/{setId}",
-                                arguments = listOf(navArgument("setId") { type = NavType.StringType })
-                            ) {
-                                val setId = it.arguments?.getString("setId")!!
-                                PokemonCardSetDetailsScreen(navController, setId)
+                            composable("pokemonCardSetDetailsScreen/{setId}") { backStackEntry ->
+                                val setId = backStackEntry.arguments?.getString("setId") ?: return@composable
+                                PokemonCardSetDetailsScreen(navController, setId, repository!!)
                             }
 
-                            // Account screens
+                            composable("addPokemonCardsToCollectionScreen") {
+                                AddPokemonCardsToCollectionScreen(navController, repository!!)
+                            }
+
+                            // Account Screens
                             composable("accountScreen") { AccountScreen() }
                             composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
-                            composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
+                            composable("myPokemonCardsScreen") {
+                                val viewModel: MyPokemonCardsViewModel = viewModel(
+                                    factory = MyPokemonCardsViewModelFactory(repository!!)
+                                )
+                                MyPokemonCardsScreen(viewModel)
+                            }
+                        }
+                    } else {
+                        // Not signed in: show sign-in
+                        NavHost(
+                            navController = navController,
+                            startDestination = "signInScreen",
+                            modifier = Modifier.padding(innerPadding)
+                        ) {
+                            composable("signInScreen") {
+                                SignInScreen(
+                                    onSignInSuccess = {
+                                        navController.navigate("allPokemonCardsScreen") {
+                                            popUpTo("signInScreen") { inclusive = true }
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
                 }

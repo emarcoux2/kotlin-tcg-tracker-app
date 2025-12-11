@@ -9,6 +9,7 @@ data class UserPokemonCardEntity(
     val localId: Long = 0,
     val cardId: String,
     val name: String?,
+    val imageUrl: String? = null,
     var isFavourite: Boolean = false,
     var isOwnedByUser: Boolean = false
 )

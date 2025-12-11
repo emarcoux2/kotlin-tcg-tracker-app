@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -30,8 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.tcgtracker.R
 import com.example.tcgtracker.db.PokemonCardRepository
+import com.example.tcgtracker.viewmodels.PokemonCardSetsViewModelFactory
 import com.example.tcgtracker.viewmodels.PokemonCardsViewModel
-import com.example.tcgtracker.viewmodels.PokemonCardsViewModelFactory
 import net.tcgdex.sdk.Extension
 import net.tcgdex.sdk.Quality
 
@@ -48,7 +47,7 @@ fun AllPokemonCardsScreen(
     repository: PokemonCardRepository
 ) {
     val viewModel: PokemonCardsViewModel = viewModel(
-        factory = PokemonCardsViewModelFactory(repository)
+        factory = PokemonCardSetsViewModelFactory(repository)
     )
 
     val cardPreviews by viewModel.allPokemonCardPreviews.collectAsState()
@@ -92,8 +91,8 @@ fun AllPokemonCardsScreen(
                         AsyncImage(
                             model = imageUrl.ifEmpty { null },
                             contentDescription = cardResume.name,
-                            placeholder = androidx.compose.ui.res.painterResource(R.drawable.ic_all_cards),
-                            error = androidx.compose.ui.res.painterResource(R.drawable.ic_all_cards),
+                            placeholder = painterResource(R.drawable.ic_all_cards),
+                            error = painterResource(R.drawable.ic_all_cards),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .aspectRatio(0.7f)

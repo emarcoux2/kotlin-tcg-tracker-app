@@ -34,6 +34,9 @@ class PokemonCardSeriesViewModel(
         loadPokemonCardSeries()
     }
 
+    /**
+     *
+     */
     fun loadPokemonCardSeries() {
         viewModelScope.launch(Dispatchers.IO) {
             _loading.value = true
@@ -49,6 +52,9 @@ class PokemonCardSeriesViewModel(
         }
     }
 
+    /**
+     *
+     */
     fun fetchFullSeries(cardSeriesId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (!_loadedCardSeries.value.containsKey(cardSeriesId)) {
