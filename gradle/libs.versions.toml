@@ -26,6 +26,7 @@ credentialsPlayServicesAuth = "1.5.0"
 googleid = "1.1.1"
 cameraView = "1.5.1"
 accompanistPermissions = "0.34.0"
+ksp = "2.0.21-1.0.25"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,9 +67,11 @@ camerax-camera2 = { group = "androidx.camera", name = "camera-camera2" }
 camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle" }
 camerax-view = { group = "androidx.camera", name = "camera-view" }
 
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServicesVersion" }
+devtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
