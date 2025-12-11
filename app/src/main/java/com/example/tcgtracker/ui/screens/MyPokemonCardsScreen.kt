@@ -41,7 +41,15 @@ import kotlinx.coroutines.flow.stateIn
 import net.tcgdex.sdk.models.subs.CardItem
 
 /**
- * Displays a logged-in user's personal collection of Pokemon cards.
+ * Composable that displays a logged-in user's personal collection of Pokemon cards.
+ *
+ * Responsibilities:
+ * Observes the user's card collection from MyPokemonCardsViewModel.
+ * Displays a label and a list of the user's cards.
+ * Handles empty state when the user has no cards added.
+ * Passes actions for favouriting and deleting cards to the provided ViewModel.
+ *
+ * @param viewModel - The MyPokemonCardsViewModel providing the user's card collection and actions.
  */
 @Composable
 fun MyPokemonCardsScreen(viewModel: MyPokemonCardsViewModel) {
@@ -66,6 +74,17 @@ fun MyPokemonCardsScreen(viewModel: MyPokemonCardsViewModel) {
     }
 }
 
+/**
+ * Composable representing a single card item in a list.
+ *
+ * Displays the card's image, name, and ID. Provides buttons to:
+ * Toggle the favourite status of the card.
+ * Delete the card from the collection.
+ *
+ * @param card - The UserPokemonCardEntity representing the card to display.
+ * @param onToggleFavourite - Lambda invoked when the favourite button is pressed.
+ * @param onDelete - Lambda invoked when the delete button is pressed.
+ */
 @Composable
 fun CardItem(
     card: UserPokemonCardEntity,

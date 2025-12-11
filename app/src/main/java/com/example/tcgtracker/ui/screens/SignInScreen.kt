@@ -32,10 +32,31 @@ import com.example.tcgtracker.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
 /**
- * Displays the sign-in screen.
+ * Composable that displays the sign-in screen for the app.
  *
- * @param context - The Context used for accessing resources and system services.
- * @param modifier - Modifier for styling or layout adjustments.
+ * This screen allows users to:
+ * Sign in with email and password.
+ * Create a new account with email and password.
+ * Continue as a guest (anonymous sign-in).
+ *
+ * It provides input fields for email and password, along with buttons for each action.
+ *
+ * Shows loading indicators while authentication is in progress and displays error
+ * messages via Toasts.
+ *
+ * @param onSignInSuccess - Lambda invoked when the user successfully signs in or creates an account.
+ * @param modifier - Optional Modifier for styling or layout adjustments.
+ *
+ * State:
+ * email: Current email input.
+ * password: Current password input.
+ * isLoading: Tracks whether an authentication request is in progress.
+ *
+ * Notes:
+ * Uses FirebaseAuth for authentication.
+ * Hides the software keyboard when buttons are pressed.
+ * Navigates to MainActivity on successful sign-in or account creation.
+ *
  */
 @Composable
 fun SignInScreen(
@@ -165,7 +186,17 @@ fun SignInScreen(
     }
 }
 
-// Firebase functions
+/**
+ * Signs in a user with email and password using Firebase Authentication.
+ *
+ * @param email - The user's email address.
+ * @param password - The user's password.
+ * @param context - Context for displaying Toasts and navigating to MainActivity.
+ * @param onComplete - Callback invoked after the sign-in attempt completes, regardless of success.
+ *
+ * On success, navigates to MainActivity with the signed-in user's ID.
+ * On failure, displays a Toast with the error message.
+ */
 private fun signInWithEmail(email: String, password: String, context: Context, onComplete: () -> Unit) {
     val auth = FirebaseAuth.getInstance()
     auth.signInWithEmailAndPassword(email, password)
@@ -183,6 +214,18 @@ private fun signInWithEmail(email: String, password: String, context: Context, o
         }
 }
 
+/**
+ * Creates a new Firebase account with the provided email and password.
+ *
+ * @param email - The user's email address.
+ * @param password - The user's password.
+ * @param context - Context for displaying Toasts and navigating to MainActivity.
+ * @param onComplete - Callback invoked after the account creation attempt completes,
+ * regardless of success.
+ *
+ * On success, navigates to MainActivity with the newly created user's ID.
+ * On failure, displays a Toast with the error message.
+ */
 private fun createAccount(email: String, password: String, context: Context, onComplete: () -> Unit) {
     val auth = FirebaseAuth.getInstance()
     auth.createUserWithEmailAndPassword(email, password)
@@ -200,6 +243,15 @@ private fun createAccount(email: String, password: String, context: Context, onC
         }
 }
 
+/**
+ * Signs in the user anonymously using Firebase Authentication.
+ *
+ * @param context - Context for displaying Toasts and navigating to MainActivity.
+ * @param onComplete - Callback invoked after the anonymous sign-in attempt completes, regardless of success.
+ *
+ * On success, navigates to MainActivity with the anonymous user's ID.
+ * On failure, displays a Toast with the error message.
+ */
 private fun signInAsGuest(context: Context, onComplete: () -> Unit) {
     val auth = FirebaseAuth.getInstance()
     auth.signInAnonymously()
@@ -217,6 +269,15 @@ private fun signInAsGuest(context: Context, onComplete: () -> Unit) {
         }
 }
 
+/**
+ * Navigates to MainActivity after successful authentication.
+ *
+ * @param context - Context used to start the activity.
+ * @param userId - The authenticated user's ID, passed as an intent extra.
+ *
+ * Clears the back stack and starts a new task to prevent the user from
+ * returning to the sign-in screen.
+ */
 private fun navigateToMain(context: Context, userId: String?) {
     val intent = Intent(context, MainActivity::class.java)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

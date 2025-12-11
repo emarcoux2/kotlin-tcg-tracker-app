@@ -39,7 +39,14 @@ class PokemonCardRepository(
 
     // ======== LOADING ========
     /**
+     * Loads full details for a specific card from local cache if available;
+     * otherwise fetches from API.
      *
+     * Saves the card to the local Room database after fetching from the API.
+     *
+     * @param cardId - The ID of the card to load.
+     *
+     * @return - The loaded ApiPokemonCardEntity, or null if the API does not return it.
      */
     suspend fun loadApiCard(cardId: String): ApiPokemonCardEntity? {
         apiPokemonCardDao.getCardById(cardId)?.let { return it }
@@ -63,7 +70,8 @@ class PokemonCardRepository(
     }
 
     /**
-     *
+     * Loads all card previews from the API and caches them locally in memory.
+     * Cards will be immediately fetched if the cache is already populated.
      */
     suspend fun loadAllCards() {
         if (allCardsCache.isEmpty()) {
@@ -73,76 +81,91 @@ class PokemonCardRepository(
 
     // ========= GETS AND FETCHES =========
     /**
-     *
+     * Fetches all Pokémon card previews from the API.
+     * @return - An array of CardResume objects representing all cards.
      */
     suspend fun fetchAllCards(): Array<CardResume> {
         return apiService.fetchAllCards()
     }
 
     /**
-     *
+     * Fetches all Pokémon card sets from the API.
+     * @return - A list of SetResume objects, or null if none are available.
      */
     suspend fun fetchAllSets(): List<SetResume>? {
         return apiService.fetchAllSets()?.toList()
     }
 
     /**
+     * Fetches full details for a specific card set by its ID.
      *
+     * @param cardSetId - The ID of the set to fetch.
+     * @return - The [TcgSet] object representing the set, or null if not found.
      */
     suspend fun fetchSetById(cardSetId: String): TcgSet? {
         return apiService.fetchSetById(cardSetId)
     }
 
     /**
+     * Returns a Flow that emits the list of all user-owned cards.
+     * This allows composables or ViewModels to observe real-time updates.
      *
+     * @return - Flow of List<UserPokemonCardEntity>.
      */
     fun getAllUserCardsFlow(): Flow<List<UserPokemonCardEntity>> {
         return userPokemonCardDao.getAllUserCardsFlow()
     }
 
     /**
+     * Retrieves all user-owned cards as a list.
      *
+     * @return - List of UserPokemonCardEntity.
      */
     suspend fun getAllUserCards(): List<UserPokemonCardEntity> {
         return userPokemonCardDao.getAllUserCards()
     }
 
     /**
+     * Retrieves a specific user-owned card by its card ID.
      *
+     * @param cardId - The ID of the card.
+     * @return - UserPokemonCardEntity if found, otherwise null.
      */
     suspend fun getUserCard(cardId: String): UserPokemonCardEntity? {
         return userPokemonCardDao.getUserCard(cardId)
     }
 
     /**
+     * Retrieves a specific user-owned card by its card ID.
      *
+     * @param cardId - The ID of the card.
+     * @return - UserPokemonCardEntity if found, otherwise null.
      */
     suspend fun getUserPokemonCard(cardId: String) =
         userPokemonCardDao.getUserCard(cardId)
 
     /**
+     * Returns the user's full collection of cards.
      *
+     * @return - List of UserPokemonCardEntity.
      */
     suspend fun getUserPokemonCardsCollection() =
         userPokemonCardDao.getAllUserCards()
 
     // ======== INSERTS AND UPSERTS ========
     /**
+     * Inserts multiple user-owned cards into local storage.
      *
+     * @param cards - List of UserPokemonCardEntity to insert.
      */
     suspend fun insertCards(cards: List<UserPokemonCardEntity>) {
         userPokemonCardDao.insertUserCards(cards)
     }
 
     /**
+     * Inserts or updates a user-owned card locally and synchronizes it to Firestore.
      *
-     */
-    suspend fun insertCard(card: UserPokemonCardEntity) {
-        userPokemonCardDao.insertUserCard(card)
-    }
-
-    /**
-     *
+     * @param card - The UserPokemonCardEntity to upsert.
      */
     suspend fun upsertUserCard(card: UserPokemonCardEntity) {
         // Insert/update locally
@@ -157,7 +180,10 @@ class PokemonCardRepository(
     }
 
     /**
+     * Inserts or updates multiple user-owned cards locally and synchronizes
+     * them to Firestore in a batch.
      *
+     * @param cards - List of UserPokemonCardEntity to upsert.
      */
     suspend fun upsertUserCards(cards: List<UserPokemonCardEntity>) {
         // Insert/update locally
@@ -175,7 +201,13 @@ class PokemonCardRepository(
 
     // ======== ADDS ========
     /**
+     * Adds multiple Pokémon cards to the user's collection.
      *
+     * Loads each card from the API if needed, inserts them into Room locally,
+     * and batches them to Firestore for remote persistence.
+     *
+     * @param cardIds - List of card IDs to add.
+     * @throws IllegalStateException - if any card cannot be found in the API.
      */
     suspend fun addPokemonCardsToUserCollection(cardIds: List<String>) {
         if (cardIds.isEmpty()) return
@@ -212,7 +244,13 @@ class PokemonCardRepository(
     }
 
     /**
+     * Adds a single Pokémon card to the user's collection.
      *
+     * Loads the card from the API if needed, inserts it into Room locally,
+     * and persists it to Firestore.
+     *
+     * @param cardId - The ID of the card to add.
+     * @throws IllegalStateException - if the card cannot be found in the API.
      */
     suspend fun addCardToUserCollection(cardId: String) {
         val apiCard = loadApiCard(cardId)
@@ -237,7 +275,14 @@ class PokemonCardRepository(
 
     // ======= SEARCH ========
     /**
+     * Searches for Pokémon cards by name.
      *
+     * Uses the in-memory cache for all card previews and filters by the query string.
+     *
+     * Returns the full card details from the API for matching cards.
+     *
+     * @param query - The search string to filter cards by name.
+     * @return - List of Card objects matching the query.
      */
     suspend fun searchCardsByName(query: String): List<Card> {
         loadAllCards()
@@ -257,7 +302,9 @@ class PokemonCardRepository(
 
     // ======== DELETE ========
     /**
+     * Deletes a user-owned card from both local storage and Firestore.
      *
+     * @param card - The UserPokemonCardEntity to delete.
      */
     suspend fun deleteUserCard(card: UserPokemonCardEntity) {
         // Delete locally

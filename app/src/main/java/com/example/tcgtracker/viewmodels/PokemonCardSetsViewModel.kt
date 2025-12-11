@@ -52,7 +52,12 @@ class PokemonCardSetsViewModel(
     }
 
     /**
-     * Fetches all card set previews asynchronously.
+     * Loads a list of all Pokemon card set previews from the repository asynchronously.
+     *
+     * Updates _allPokemonCardSetPreviews with the fetched previews and clears _error on success.
+     * Sets _loading to true while the operation is in progress and false when finished.
+     *
+     * If an exception occurs, _error is updated with the exception message.
      */
     fun loadPokemonCardSetPreviews() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -70,7 +75,12 @@ class PokemonCardSetsViewModel(
     }
 
     /**
-     * Loads full details for a specific card set if not already loaded.
+     * Fetches full details for a specific Pokemon card set by its ID if not already loaded.
+     *
+     * Adds the loaded set to _loadedCardSets keyed by cardSetId.
+     * Any exceptions during fetching are silently ignored.
+     *
+     * @param cardSetId - The ID of the card set to fetch full details for.
      */
     fun fetchFullCardSet(cardSetId: String) {
         viewModelScope.launch(Dispatchers.IO) {

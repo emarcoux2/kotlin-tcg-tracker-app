@@ -67,7 +67,13 @@ class PokemonCardsViewModel(
     }
 
     /**
-     * Fetches all card previews asynchronously.
+     * Loads a list of all Pokemon card previews from the repository asynchronously.
+     *
+     * Updates _allPokemonCardPreviews with the fetched previews and sets _error]
+     * to null on success.
+     * Updates _loading state while the operation is in progress.
+     *
+     * If an exception occurs, sets _error with the exception message.
      */
     fun loadCardPreviews() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -85,7 +91,12 @@ class PokemonCardsViewModel(
     }
 
     /**
-     * Loads full details for a specific card if not already loaded.
+     * Fetches full details for a specific Pokemon card by its ID if not already loaded.
+     *
+     * Updates _loadedApiCards by adding the loaded card to the map keyed by cardId.
+     * Any exceptions during fetching are silently ignored.
+     *
+     * @param cardId - The ID of the card to fetch details for.
      */
     fun fetchFullCard(cardId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -101,7 +112,10 @@ class PokemonCardsViewModel(
     }
 
     /**
-     * Fetches the user's Pokemon card collection.
+     * Loads the current user's Pokemon card collection from the repository.
+     *
+     * Updates _userPokemonCards with a map of card ID to UserPokemonCardEntity.
+     * Any exceptions during fetching are silently ignored.
      */
     fun loadUserCardsCollection() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -113,7 +127,12 @@ class PokemonCardsViewModel(
     }
 
     /**
-     * Adds a card to the user's collection and refreshes the collection.
+     * Adds a specific card to the user's collection and refreshes the collection.
+     *
+     * @param cardId - The ID of the card to add.
+     *
+     * This function calls loadUserCardsCollection after adding to ensure
+     * the UI reflects the updated collection.
      */
     fun addToUserCardsCollection(cardId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -123,7 +142,16 @@ class PokemonCardsViewModel(
     }
 
     /**
-     * Returns the best available image URL for a card, prioritizing full API data.
+     * Returns the most appropriate image URL for a card.
+     *
+     * Prioritizes the fully loaded API card image if available; otherwise falls back to the preview image.
+     *
+     * Returns an empty string if no image URL is found.
+     *
+     * @param cardId - The ID of the card.
+     * @param preview - The CardResume preview object for fallback image retrieval.
+     *
+     * @return - The URL of the card image as a String, or an empty string.
      */
     fun getCardImageUrl(cardId: String, preview: CardResume): String {
         loadedApiCards.value[cardId]?.imageUrl?.let {

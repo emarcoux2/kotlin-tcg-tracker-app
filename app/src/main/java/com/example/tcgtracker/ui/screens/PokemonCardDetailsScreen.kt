@@ -42,12 +42,16 @@ import net.tcgdex.sdk.Extension
 import net.tcgdex.sdk.Quality
 
 /**
- * Displays the details of an individual Pokemon card.
+ * Composable that displays detailed information about a single Pokemon card.
  *
- * @param navController - The object responsible for navigation between composable screens.
- * @param viewModel - The PokemonCardsViewModel providing the state and actions
- * for this screen.
- * @param cardId - The ID of the card that should be displayed.
+ * Responsibilities:
+ * Fetches and displays full card details using the repository.
+ * Handles user interactions such as favouriting or adding the card to a collection.
+ * Integrates with navigation to allow moving between screens.
+ *
+ * @param navController - NavController used to navigate between composable screens.
+ * @param cardId - The ID of the Pokemon card whose details should be displayed.
+ * @param repository - PokemonCardRepository providing access to card data and user collection operations.
  */
 @Composable
 fun PokemonCardDetailsScreen(

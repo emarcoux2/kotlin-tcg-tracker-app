@@ -50,7 +50,16 @@ class AddPokemonCardToCollectionViewModel(
     val error = _error.asStateFlow()
 
     /**
+     * Searches for Pokemon cards whose names contain the provided query string.
      *
+     * Updates _searchResults with the filtered list of cards matching the query.
+     *
+     * Sets _loading while the search is in progress and updates _error
+     * if an exception occurs.
+     *
+     * If the query is blank, clears the search results immediately.
+     *
+     * @param query - The search string to filter card names.
      */
     fun search(query: String) {
         if (query.isBlank()) {
@@ -75,7 +84,12 @@ class AddPokemonCardToCollectionViewModel(
     }
 
     /**
+     * Toggles the selection state of a card by its ID.
      *
+     * Adds the card ID to _selected if it was not selected, or removes it
+     * if it was already selected.
+     *
+     * @param id - The ID of the card to toggle in the selection set.
      */
     fun toggleSelected(id: String) {
         _selected.update { current ->
@@ -84,7 +98,13 @@ class AddPokemonCardToCollectionViewModel(
     }
 
     /**
+     * Adds all currently selected cards to the user's collection.
      *
+     * Uses the IDs in _selected to add the cards via the repository asynchronously.
+     *
+     * Clears the selection after the operation.
+     *
+     * Updates _error if an exception occurs during the addition process.
      */
     fun addSelected() {
         viewModelScope.launch(Dispatchers.IO) {

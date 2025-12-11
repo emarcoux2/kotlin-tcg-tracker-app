@@ -49,7 +49,23 @@ import net.tcgdex.sdk.Quality
 import com.example.tcgtracker.R
 
 /**
+ * Composable screen for searching and adding Pokemon cards to the user's collection.
  *
+ * Responsibilities:
+ * Provides a search bar to filter cards by name.
+ * Displays search results in a grid with card images, names, and selection checkboxes.
+ * Tracks selected cards and allows adding them to the user's collection via the ViewModel.
+ * Shows loading and error states during data fetching.
+ * Integrates navigation to return to the previous screen after adding cards.
+ *
+ * @param navController - NavController used to navigate back after adding cards.
+ * @param repository - PokemonCardRepository providing access to Pokemon card data for the ViewModel.
+ *
+ * State observed from AddPokemonCardToCollectionViewModel:
+ * searchResults: Filtered list of card previews based on the current query.
+ * selected: Set of currently selected card IDs.
+ * loading: Indicates if data is being loaded.
+ * error: Displays error messages if a search or fetch fails.
  */
 @Composable
 fun AddPokemonCardsToCollectionScreen(

@@ -51,7 +51,12 @@ class PokemonCardSeriesViewModel(
     }
 
     /**
-     * Fetches all Pokemon card series asynchronously.
+     * Loads a list of all Pokemon card series from the service asynchronously.
+     *
+     * Updates _allPokemonCardSeries with the fetched series and clears _error on success.
+     * Sets _loading to true while the operation is in progress and false when finished.
+     *
+     * If an exception occurs, _error is updated with the exception message.
      */
     fun loadPokemonCardSeries() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -69,7 +74,13 @@ class PokemonCardSeriesViewModel(
     }
 
     /**
-     * Loads full details for a specific series if not already loaded.
+     * Fetches full details for a specific Pokemon card series by its ID if not already loaded.
+     *
+     * Adds the loaded series to _loadedCardSeries keyed by cardSeriesId.
+     *
+     * Any exceptions during fetching are silently ignored.
+     *
+     * @param cardSeriesId - The ID of the card series to fetch full details for.
      */
     fun fetchFullSeries(cardSeriesId: String) {
         viewModelScope.launch(Dispatchers.IO) {

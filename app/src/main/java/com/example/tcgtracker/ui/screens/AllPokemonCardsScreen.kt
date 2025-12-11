@@ -35,11 +35,16 @@ import net.tcgdex.sdk.Extension
 import net.tcgdex.sdk.Quality
 
 /**
- * Displays all Pokemon cards.
+ * Composable that displays a list of all Pokemon cards.
  *
- * @param navController - The object responsible for navigation between composable screens.
- * @param viewModel - The PokemonCardsViewModel providing the state and actions
- * for this screen.
+ * Responsibilities:
+ * Fetches and observes the list of card previews from PokemonCardsViewModel.
+ * Displays each card in a scrollable list.
+ * Supports navigation to individual card detail screens via navController.
+ * Handles loading and error states as provided by the ViewModel.
+ *
+ * @param navController - NavHostController used to navigate between composable screens.
+ * @param repository - PokemonCardRepository providing access to Pokemon card data for the
  */
 @Composable
 fun AllPokemonCardsScreen(

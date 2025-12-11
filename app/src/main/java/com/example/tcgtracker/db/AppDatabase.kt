@@ -5,8 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.tcgtracker.db.daos.ApiPokemonCardDao
-import com.example.tcgtracker.db.daos.PokemonCardSerieDao
-import com.example.tcgtracker.db.daos.PokemonCardSetDao
 import com.example.tcgtracker.db.daos.UserPokemonCardDao
 import com.example.tcgtracker.db.entities.ApiPokemonCardEntity
 import com.example.tcgtracker.db.entities.PokemonCardSerieEntity
@@ -14,8 +12,17 @@ import com.example.tcgtracker.db.entities.PokemonCardSetEntity
 import com.example.tcgtracker.db.entities.UserPokemonCardEntity
 
 /**
- * The main database holder for the app, which gives access to the DAOs and managing
- * the app's persistent data.
+ * The main Room database for the application, providing access to all DAOs
+ * and managing the app's persistent data for Pokémon cards.
+ *
+ * This database serves as the single source of truth for local storage, including:
+ * Cached API card metadata (ApiPokemonCardEntity)
+ * Pokémon card sets (PokemonCardSetEntity)
+ * Pokémon card series (PokemonCardSerieEntity)
+ * User-owned Pokémon cards (UserPokemonCardEntity)
+ *
+ * @property version - The database version (used for migrations).
+ * @property exportSchema - Whether the database schema should be exported.
  *
  */
 @Database(

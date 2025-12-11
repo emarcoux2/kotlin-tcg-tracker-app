@@ -67,6 +67,12 @@ fun MainBottomNavBar(navController: NavController) {
     }
 }
 
+/**
+ * Displays the bottom navigation bar when the user is on the PokemonCardSetsBySeries screen,
+ * and the AllPokemonCardSets screen.
+ *
+ * @param navController - The object responsible for navigation between composable screens.
+ */
 @Composable
 fun PokemonCardSetsBottomNavBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()

@@ -36,7 +36,11 @@ class MyPokemonCardsViewModel(
             .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     /**
-     * Flips the isFavourite status of a given card and updates the repository.
+     * Toggles the isFavourite status of the specified user card and updates it in the repository.
+     *
+     * The card's isFavourite property is flipped, and the updated card is saved asynchronously.
+     *
+     * @param card - The UserPokemonCardEntity whose favourite status will be toggled.
      */
     fun toggleFavourite(card: UserPokemonCardEntity) {
         val updatedCard = card.copy(isFavourite = !card.isFavourite)
@@ -46,7 +50,11 @@ class MyPokemonCardsViewModel(
     }
 
     /**
-     * Removes a given card from the user's collection in the repository.
+     * Deletes the specified card from the user's collection in the repository.
+     *
+     * The removal is performed asynchronously and updates the underlying data source.
+     *
+     * @param card - The UserPokemonCardEntity to be removed from the collection.
      */
     fun deleteCard(card: UserPokemonCardEntity) {
         viewModelScope.launch {
