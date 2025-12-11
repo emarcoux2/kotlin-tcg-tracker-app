@@ -11,7 +11,27 @@ import kotlinx.coroutines.launch
 import net.tcgdex.sdk.models.CardResume
 
 /**
+ * ViewModel for managing the "Add Pokemon Card to Collection" screen.
  *
+ * Responsibilities:
+ * Searching for Pokemon cards by name.
+ * Tracking selected cards for addition to the user's collection.
+ * Adding selected cards to the user's collection.
+ * Exposing loading and error states for UI feedback.
+ *
+ * @property repository - Repository providing access to Pokemon card data and
+ * user collection management.
+ *
+ * State flows exposed:
+ * searchResults: List of cards matching the current search query.
+ * selected: Set of currently selected card IDs for addition.
+ * loading: Current loading state.
+ * error: Error messages, if any.
+ *
+ * Functions:
+ * search: Filters cards by the given query string.
+ * toggleSelected: Adds or removes a card ID from the selection set.
+ * addSelected: Adds all currently selected cards to the user's collection and clears the selection.
  */
 class AddPokemonCardToCollectionViewModel(
     private val repository: PokemonCardRepository

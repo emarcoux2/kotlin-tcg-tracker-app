@@ -11,8 +11,24 @@ import net.tcgdex.sdk.models.Serie
 import net.tcgdex.sdk.models.SerieResume
 
 /**
- * This ViewModel is responsible for managing the state and actions of the
- * Pokemon Card Series screen.
+ * ViewModel for managing the state and actions of the "Pokemon Card Series" screen.
+ *
+ * Responsibilities:
+ * Loading and exposing a list of all Pokemon card series from the service.
+ * Fetching full details for individual card series on demand.
+ * Exposing loading and error states for UI feedback.
+ *
+ * @property service - Service providing access to Pokemon TCG series data.
+ *
+ * State flows exposed:
+ * allPokemonCardSeries: List of card series summaries for display.
+ * loadedCardSeries: Map of fully loaded card series keyed by series ID.
+ * loading: Current loading state.
+ * error: Error messages, if any.
+ *
+ * Functions:
+ * loadPokemonCardSeries: Fetches all Pokemon card series asynchronously.
+ * fetchFullSeries: Loads full details for a specific series if not already loaded.
  *
  */
 class PokemonCardSeriesViewModel(
@@ -35,7 +51,7 @@ class PokemonCardSeriesViewModel(
     }
 
     /**
-     *
+     * Fetches all Pokemon card series asynchronously.
      */
     fun loadPokemonCardSeries() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -53,7 +69,7 @@ class PokemonCardSeriesViewModel(
     }
 
     /**
-     *
+     * Loads full details for a specific series if not already loaded.
      */
     fun fetchFullSeries(cardSeriesId: String) {
         viewModelScope.launch(Dispatchers.IO) {

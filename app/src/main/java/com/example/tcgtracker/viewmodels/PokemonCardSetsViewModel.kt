@@ -11,11 +11,24 @@ import net.tcgdex.sdk.models.Set as TcgSet
 import net.tcgdex.sdk.models.SetResume
 
 /**
- * This ViewModel is responsible for managing the state and actions of the
- * Pokemon Card Sets screen.
+ * ViewModel for managing the state and actions of the "Pokemon Card Sets" screen.
  *
- * This ViewModel will:
+ * Responsibilities:
+ * Loading and exposing a list of all Pokemon card set previews from the repository.
+ * Fetching full details for individual card sets on demand.
+ * Exposing loading and error states for UI feedback.
  *
+ * @property repository - Repository providing access to both local and remote Pokemon card set data.
+ *
+ * State flows exposed:
+ * allPokemonCardSetPreviews: List of card set previews for display.
+ * loadedCardSets: Map of fully loaded card sets keyed by set ID.
+ * loading: Current loading state.
+ * error: Error messages, if any.
+ *
+ * Functions:
+ * loadPokemonCardSetPreviews: Fetches all card set previews asynchronously.
+ * fetchFullCardSet: Loads full details for a specific card set if not already loaded.
  *
  */
 class PokemonCardSetsViewModel(
@@ -39,7 +52,7 @@ class PokemonCardSetsViewModel(
     }
 
     /**
-     *
+     * Fetches all card set previews asynchronously.
      */
     fun loadPokemonCardSetPreviews() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -57,7 +70,7 @@ class PokemonCardSetsViewModel(
     }
 
     /**
-     *
+     * Loads full details for a specific card set if not already loaded.
      */
     fun fetchFullCardSet(cardSetId: String) {
         viewModelScope.launch(Dispatchers.IO) {

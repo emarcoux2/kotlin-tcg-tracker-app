@@ -10,6 +10,21 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
+ * ViewModel for managing the user's personal Pokemon card collection.
+ *
+ * Responsibilities:
+ * Exposing the user's collection as a reactive StateFlow.
+ * Toggling the favourite status of a card.
+ * Deleting a card from the user's collection.
+ *
+ * @property repository - Repository providing access to the user's Pokemon card data.
+ *
+ * State flows exposed:
+ * userCards: List of the user's Pokemon cards, updated in real time.
+ *
+ * Functions:
+ * toggleFavourite: Flips the isFavourite status of a given card and updates the repository.
+ * deleteCard: Removes a given card from the user's collection in the repository.
  *
  */
 class MyPokemonCardsViewModel(
@@ -21,7 +36,7 @@ class MyPokemonCardsViewModel(
             .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     /**
-     *
+     * Flips the isFavourite status of a given card and updates the repository.
      */
     fun toggleFavourite(card: UserPokemonCardEntity) {
         val updatedCard = card.copy(isFavourite = !card.isFavourite)
@@ -31,7 +46,7 @@ class MyPokemonCardsViewModel(
     }
 
     /**
-     *
+     * Removes a given card from the user's collection in the repository.
      */
     fun deleteCard(card: UserPokemonCardEntity) {
         viewModelScope.launch {

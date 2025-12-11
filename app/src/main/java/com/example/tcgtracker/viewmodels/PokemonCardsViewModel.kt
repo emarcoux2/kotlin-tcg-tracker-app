@@ -16,10 +16,30 @@ import net.tcgdex.sdk.Quality
 import net.tcgdex.sdk.models.CardResume
 
 /**
- * This ViewModel is responsible for managing the state and actions of the
- * All Pokemon Cards screen.
+ * ViewModel for managing the state and actions of the "All Pokemon Cards" screen.
  *
- * This ViewModel will:
+ * Responsibilities:
+ * Loading and exposing a list of all Pokemon card previews from the repository.
+ * Fetching full card details for individual cards on demand.
+ * Loading and managing the user's personal Pokemon card collection.
+ * Adding cards to the user's collection.
+ * Exposing loading and error states for UI feedback.
+ *
+ * @property repository - Repository providing access to both local and remote Pokemon card data.
+ *
+ * State flows exposed:
+ * allPokemonCardPreviews: List of card previews for display.
+ * loadedApiCards: Map of fully loaded API card entities keyed by card ID.
+ * userPokemonCards: Map of user's owned card entities keyed by card ID.
+ * loading: Current loading state.
+ * error: Error messages, if any.
+ *
+ * Functions:
+ * loadCardPreviews: Fetches all card previews asynchronously.
+ * fetchFullCard: Loads full details for a specific card if not already loaded.
+ * loadUserCardsCollection: Fetches the user's Pokemon card collection.
+ * addToUserCardsCollection: Adds a card to the user's collection and refreshes the collection.
+ * getCardImageUrl: Returns the best available image URL for a card, prioritizing full API data.
  *
  */
 class PokemonCardsViewModel(
@@ -47,7 +67,7 @@ class PokemonCardsViewModel(
     }
 
     /**
-     *
+     * Fetches all card previews asynchronously.
      */
     fun loadCardPreviews() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -65,7 +85,7 @@ class PokemonCardsViewModel(
     }
 
     /**
-     *
+     * Loads full details for a specific card if not already loaded.
      */
     fun fetchFullCard(cardId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -81,7 +101,7 @@ class PokemonCardsViewModel(
     }
 
     /**
-     *
+     * Fetches the user's Pokemon card collection.
      */
     fun loadUserCardsCollection() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -93,7 +113,7 @@ class PokemonCardsViewModel(
     }
 
     /**
-     *
+     * Adds a card to the user's collection and refreshes the collection.
      */
     fun addToUserCardsCollection(cardId: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -103,7 +123,7 @@ class PokemonCardsViewModel(
     }
 
     /**
-     *
+     * Returns the best available image URL for a card, prioritizing full API data.
      */
     fun getCardImageUrl(cardId: String, preview: CardResume): String {
         loadedApiCards.value[cardId]?.imageUrl?.let {

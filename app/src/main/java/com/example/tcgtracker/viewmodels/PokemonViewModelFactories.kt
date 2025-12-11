@@ -16,7 +16,13 @@ import com.example.tcgtracker.db.PokemonCardRepository
 //}
 
 /**
+ * Factory for creating instances of PokemonCardSetsViewModel and PokemonCardsViewModel.
  *
+ * @property repository - Repository providing access to Pokemon card data.
+ *
+ * This factory allows multiple related ViewModels to share the same repository instance.
+ *
+ * Throws IllegalArgumentException if an unsupported ViewModel class is requested.
  */
 class PokemonCardSetsViewModelFactory(
     private val repository: PokemonCardRepository
@@ -33,7 +39,11 @@ class PokemonCardSetsViewModelFactory(
 }
 
 /**
+ * Factory for creating instances of PokemonCardsViewModel associated with a series.
  *
+ * @property repository - Repository providing access to Pokemon card data.
+ *
+ * Throws IllegalArgumentException if an unsupported ViewModel class is requested.
  */
 class PokemonCardSeriesViewModelFactory(
     private val repository: PokemonCardRepository
@@ -47,7 +57,13 @@ class PokemonCardSeriesViewModelFactory(
 }
 
 /**
+ * Factory for creating instances of AddPokemonCardToCollectionViewModel.
  *
+ * @property repository - Repository providing access to Pokemon card data.
+ *
+ * This ViewModel handles the logic for adding cards to the user's collection.
+ *
+ * Throws IllegalArgumentException if an unsupported ViewModel class is requested.
  */
 class AddPokemonCardToCollectionViewModelFactory(
     private val repository: PokemonCardRepository

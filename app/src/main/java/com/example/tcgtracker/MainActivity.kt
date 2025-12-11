@@ -55,8 +55,29 @@ import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 
 /**
- * Displays the bottom navbar on certain screens. The guest user currently begins on
- * the All Pokemon Cards screen, while logged-in users begin on the Sign In screen.
+ * Main entry point of the TCG Tracker app.
+ *
+ * This activity is responsible for:
+ * Initializing the Compose UI with edge-to-edge support.
+ * Setting up the app theme, scaffold, top app bar, and dynamic bottom navigation bars.
+ * Managing Firebase Authentication state and loading the current user.
+ * Initializing the PokemonCardRepository with local and remote data sources for
+ *      the signed-in user.
+ * Hosting the navigation graph for the app's screens, including:
+ * Pokemon card lists, details, sets, and series.
+ * User account screens such as favourites and personal collection.
+ * Sign-in flow for unauthenticated users.
+ * The bottom navigation bars are conditionally displayed based on the current
+ *      navigation destination:
+ * MainBottomNavBar for primary card browsing screens.
+ * PokemonCardSetsBottomNavBar for card sets filtered by series.
+ * AccountBottomNavBar for account-related screens.
+ *
+ * Firebase Authentication and repository initialization are handled asynchronously using LaunchedEffect.
+ *
+ * Screens are composed via NavHost, and arguments are safely extracted from back stack entries.
+ *
+ * Uses Material3 components and supports coroutines for snackbars and async operations.
  */
 class MainActivity : ComponentActivity() {
 
