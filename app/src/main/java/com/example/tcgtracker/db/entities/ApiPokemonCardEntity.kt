@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
- * Represents a Pokémon card stored in the local database.
+ * Represents a Pokémon card from the API getting stored in the local database.
  *
  * @property id - The unique identifier of the card.
  * @property name - The name of the card.
@@ -12,12 +12,16 @@ import androidx.room.PrimaryKey
  * @property rarity - The rarity of the card.
  * @property imageUrl - The URL of the card's image.
  */
-@Entity(tableName = "pokemonCards")
-data class PokemonCardEntity(
+@Entity(tableName = "apiPokemonCards")
+data class ApiPokemonCardEntity(
     @PrimaryKey val id: String?,
-    var name: String?,
-    var setId: String?,
-    var rarity: String?,
-    var imageUrl: String?,
-    var isFavourite: Boolean = false
+    val name: String?,
+    val setId: String?,
+    val setName: String?,
+    val setLogo: String?,
+    val rarity: String?,
+    val types: List<String>?,
+    val description: String?,
+    val imageUrl: String?,
+    var isFavourite: Boolean
 )
