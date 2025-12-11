@@ -22,13 +22,13 @@ development.
 
 The app is organized into the following packages:
 
-1. Api
+👉 1. Api
 - Handles communication with the remote TCGdex API.
 Contains:
 - PokemonTCGdexService – Fetches cards, sets, and series from the API.
 - Data models for API responses.
 
-2. MVVM
+👉 2. MVVM
 - ViewModel layer managing UI state and business logic. 
 Contains:
 - PokemonCardsViewModel – Manages all cards screen.
@@ -37,33 +37,33 @@ Contains:
 - AddPokemonCardToCollectionViewModel – Handles adding cards to user collection.
 - MyPokemonCardsViewModel – Handles the user’s personal collection.
 
-3. Repository
+👉 3. Repository
 Central data source orchestrating API, Room, and Firebase.
 Contains:
 PokemonCardRepository – Single source of truth for cards and collections.
 
-4. Navigation
+👉 4. Navigation
 Handles app navigation using Jetpack Compose NavHostController.
 NavGraph or NavHost definitions for all composable screens.
 
-5. OCR Scanner (Not implemented)
+👉 5. OCR Scanner (Not implemented)
 Package reserved for future feature to scan Pokémon cards using OCR.
 
-6. AppDatabase (Room)
+👉 6. AppDatabase (Room)
 Local database using Room for offline caching.
 DAOs: ApiPokemonCardDao, UserPokemonCardDao
 Entities: ApiPokemonCardEntity, UserPokemonCardEntity, PokemonCardSetEntity, PokemonCardSerieEntity.
 
-7. Firebase Authentication
+👉 7. Firebase Authentication
 - Manages user authentication.
 - Email/password sign-in
 - Account creation
 - Guest login
 
-8. Destinations
+👉 8. Destinations
 Optional: Could include constants or helpers for navigation routes.
 
-9. Screens
+👉 9. Screens
 - Composable screens for the app UI:
 - AllPokemonCardsScreen
 - PokemonCardDetailsScreen
