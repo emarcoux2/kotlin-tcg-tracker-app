@@ -1,6 +1,5 @@
 package com.example.tcgtracker
 
-import android.R.attr.type
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -36,9 +36,11 @@ import com.example.tcgtracker.ui.screens.PokemonCardSetDetailsScreen
 import com.example.tcgtracker.ui.screens.AllPokemonCardSetsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardSeriesDetailsScreen
 import com.example.tcgtracker.ui.screens.PokemonCardSetsBySeriesScreen
-import com.example.tcgtracker.ui.screens.ScanCardsScreen
+import com.example.tcgtracker.ui.screens.SignInScreen
+//import com.example.tcgtracker.ui.screens.ScanCardsScreen
 import com.example.tcgtracker.ui.theme.TCGTrackerTheme
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.launch
 
@@ -60,6 +62,10 @@ class MainActivity : ComponentActivity() {
                 val currentDestination = navBackStackEntry?.destination?.route
 
                 val fs_db = Firebase.firestore
+                val auth = FirebaseAuth.getInstance()
+                val currentUser = auth.currentUser
+
+                val startDestination = if (currentUser == null) "signInScreen" else "allPokemonCardsScreen"
 
                 val showMainBottomNavBar = when (currentDestination) {
                     "allPokemonCardsScreen",
@@ -115,13 +121,14 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = "allPokemonCardsScreen",
+                        startDestination = startDestination,
                         modifier = Modifier.padding(innerPadding)
                     ) {
+                        composable("signInScreen") { SignInScreen(context = LocalContext.current) }
                         composable("accountScreen") { AccountScreen() }
                         composable("favouritePokemonCardsScreen") { FavouritePokemonCardsScreen() }
                         composable("myPokemonCardsScreen") { MyPokemonCardsScreen() }
-                        composable("scanCardsScreen") { ScanCardsScreen(navController) }
+//                        composable("scanCardsScreen") { ScanCardsScreen(navController) }
                         composable("allPokemonCardsScreen") { AllPokemonCardsScreen(navController) }
                         composable("pokemonCardDetailsScreen/{cardId}") { backStackEntry ->
                             val cardId = backStackEntry.arguments?.getString("cardId") ?: return@composable

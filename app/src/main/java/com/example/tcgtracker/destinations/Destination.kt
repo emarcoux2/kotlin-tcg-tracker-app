@@ -11,6 +11,7 @@ package com.example.tcgtracker.destinations
  * like a bottom nav bar.
  */
 open class Destination(val route: String, val label: String) {
+    object SignIn: Destination("signInScreen", "Sign In")
     object Account: Destination("accountScreen", "Account")
     object FavouritePokemonCards: Destination("favouritePokemonCardsScreen", "Favourites")
     object MyPokemonCards: Destination("myPokemonCardsScreen", "My Pokemon Cards")
