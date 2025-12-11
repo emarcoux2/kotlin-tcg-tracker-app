@@ -17,6 +17,9 @@ interface UserPokemonCardDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserCard(card: UserPokemonCardEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUserCards(cards: List<UserPokemonCardEntity>)
+
     @Query("DELETE FROM userPokemonCards WHERE localId = :localId")
     suspend fun deleteUserCard(localId: UserPokemonCardEntity)
 }
